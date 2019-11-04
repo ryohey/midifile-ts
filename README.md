@@ -30,9 +30,11 @@ const midi = read(data)
 ### Parse MIDI on the browser
 
 ```ts
+import { read, MidiFile } from "midifile-ts"
+
 const changeFileInput = (
   input: HTMLInputElement,
-  callback: (midi: any) => void
+  callback: (midi: MidiFile|null) => void
 ) => {
   if (input.files === null || input.files.length === 0) {
     return
