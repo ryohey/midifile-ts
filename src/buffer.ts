@@ -1,34 +1,32 @@
 import toCharCodes from "./toCharCodes"
 
 export default class Buffer {
-  data: number[] = []
+  private data: number[] = []
+  private position: number = 0
 
   get length() {
     return this.data.length
   }
 
-  writeByte(v: number, pos?: number) {
-    if (pos) {
-      this.data[pos] = v
-    } else {
-      this.data.push(v)
-    }
+  writeByte(v: number) {
+    this.data.push(v)
+    this.position++
   }
 
   writeStr(str: string) {
     this.writeBytes(toCharCodes(str))
   }
 
-  writeInt32(v: number, pos: number = 0) {
-    this.writeByte((v >> 24) & 0xff, pos)
-    this.writeByte((v >> 16) & 0xff, pos + 1)
-    this.writeByte((v >> 8) & 0xff, pos + 2)
-    this.writeByte(v & 0xff, pos + 3)
+  writeInt32(v: number) {
+    this.writeByte((v >> 24) & 0xff)
+    this.writeByte((v >> 16) & 0xff)
+    this.writeByte((v >> 8) & 0xff)
+    this.writeByte(v & 0xff)
   }
 
-  writeInt16(v: number, pos: number = 0) {
-    this.writeByte((v >> 8) & 0xff, pos)
-    this.writeByte(v & 0xff, pos + 1)
+  writeInt16(v: number) {
+    this.writeByte((v >> 8) & 0xff)
+    this.writeByte(v & 0xff)
   }
 
   writeBytes(arr: number[]) {
@@ -37,12 +35,11 @@ export default class Buffer {
 
   writeChunk(id: string, func: (buf: Buffer) => void) {
     this.writeStr(id)
-    const sizePos = this.length
     this.writeInt32(0) // dummy chunk size
     const start = this.length
     func(this) // write chunk contents
     const size = this.length - start
-    this.writeInt32(size, sizePos) // write chunk size
+    this.writeInt32(size) // write chunk size
   }
 
   toBytes() {
