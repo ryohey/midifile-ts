@@ -35,11 +35,12 @@ export default class Buffer {
 
   writeChunk(id: string, func: (buf: Buffer) => void) {
     this.writeStr(id)
-    this.writeInt32(0) // dummy chunk size
-    const start = this.length
-    func(this) // write chunk contents
-    const size = this.length - start
-    this.writeInt32(size) // write chunk size
+    
+    const chunkBuf = new Buffer()
+    func(chunkBuf)
+
+    this.writeInt32(chunkBuf.length)
+    this.writeBytes(chunkBuf.data)
   }
 
   toBytes() {

@@ -1,4 +1,4 @@
-export type StreamSource = DataView | number[] | ArrayBuffer | Buffer
+export type StreamSource = DataView | number[] | ArrayBuffer | Buffer | Uint8Array
 
 /* Wrapper for accessing strings through sequential reads */
 export default class Stream {
@@ -14,6 +14,10 @@ export default class Stream {
       this.buf = new DataView(buf.buffer)
     } else if (buf instanceof Array) {
       this.buf = new DataView(new Uint8Array(buf).buffer)
+    } else if (buf instanceof Uint8Array) {
+      this.buf = new DataView(buf.buffer)
+    } else {
+      throw new Error("not supported type: " + (typeof buf))
     }
   }
 
