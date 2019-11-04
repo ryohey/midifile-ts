@@ -1,4 +1,4 @@
-export { default as read } from "./read"
+export { default as read, MidiFile, MidiHeader } from "./read"
 export { default as write } from "./write"
 export { default as serialize } from "./serialize"
 export { default as deserialize } from "./deserialize"
