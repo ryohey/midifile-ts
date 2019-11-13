@@ -1,6 +1,6 @@
-import toCharCodes from "./toCharCodes"
+import { toCharCodes } from "./toCharCodes"
 
-export default class Buffer {
+export class Buffer {
   private data: number[] = []
   private position: number = 0
 
@@ -35,7 +35,7 @@ export default class Buffer {
 
   writeChunk(id: string, func: (buf: Buffer) => void) {
     this.writeStr(id)
-    
+
     const chunkBuf = new Buffer()
     func(chunkBuf)
 

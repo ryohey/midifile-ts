@@ -1,4 +1,4 @@
-export default {
+export const MIDIChannelEvents: { [key: string]: number } = {
   noteOff: 0x08,
   noteOn: 0x09,
   noteAftertouch: 0x0a,
@@ -6,4 +6,4 @@ export default {
   programChange: 0x0c,
   channelAftertouch: 0x0d,
   pitchBend: 0x0e
-} as { [key: string]: number }
+}

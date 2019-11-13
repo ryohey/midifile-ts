@@ -1,4 +1,4 @@
-export default {
+export const MIDIMetaEvents: { [key: string]: number } = {
   sequenceNumber: 0x00,
   text: 0x01,
   copyrightNotice: 0x02,
@@ -15,4 +15,4 @@ export default {
   timeSignature: 0x58,
   keySignature: 0x59,
   sequencerSpecific: 0x7f
-} as { [key: string]: number }
+}

@@ -142,14 +142,19 @@ declare class Buffer {
     writeChunk(id: string, func: (buf: Buffer) => void): void;
     toBytes(): Uint8Array;
 }
-declare const _default: {
+declare const MIDIChannelEvents: {
+    [key: string]: number;
+};
+declare const MIDIMetaEvents: {
     [key: string]: number;
 };
 declare function serialize(e: AnyEvent, includeDeltaTime?: boolean): number[];
 declare function write(tracks: AnyEvent[][], ticksPerBeat?: number): Uint8Array;
-export { _default as MIDIChannelEvents };
-export { _default as MIDIControlEventNames };
-export { _default as MIDIControlEvents };
-export { _default as MIDIMetaEventNames };
-export { _default as MIDIMetaEvents };
-export { read, MidiFile, MidiHeader, write, serialize, deserialize, StreamSource, Event, MetaEvent, SequenceNumberEvent, TextEvent, CopyrightNoticeEvent, TrackNameEvent, InstrumentNameEvent, LyricsEvent, MarkerEvent, CuePointEvent, ChannelPrefixEvent, PortPrefixEvent, EndOfTrackEvent, SetTempoEvent, SmpteOffsetEvent, TimeSignatureEvent, KeySignatureEvent, SequencerSpecificEvent, UnknownMetaEvent, ChannelEvent, NoteOffEvent, NoteOnEvent, NoteAftertouchEvent, ProgramChangeEvent, ChannelAftertouchEvent, PitchBendEvent, UnknownChannelEvent, ControllerEvent, SysExEvent, DividedSysExEvent, AnyEvent };
+declare const MIDIControlEventNames: string[];
+declare const MIDIControlEvents: {
+    [key: string]: number;
+};
+declare const MIDIMetaEventNames: {
+    [key: number]: string;
+};
+export { read, MidiFile, MidiHeader, write, serialize, deserialize, MIDIChannelEvents, MIDIControlEventNames, MIDIControlEvents, MIDIMetaEventNames, MIDIMetaEvents, StreamSource, Event, MetaEvent, SequenceNumberEvent, TextEvent, CopyrightNoticeEvent, TrackNameEvent, InstrumentNameEvent, LyricsEvent, MarkerEvent, CuePointEvent, ChannelPrefixEvent, PortPrefixEvent, EndOfTrackEvent, SetTempoEvent, SmpteOffsetEvent, TimeSignatureEvent, KeySignatureEvent, SequencerSpecificEvent, UnknownMetaEvent, ChannelEvent, NoteOffEvent, NoteOnEvent, NoteAftertouchEvent, ProgramChangeEvent, ChannelAftertouchEvent, PitchBendEvent, UnknownChannelEvent, ControllerEvent, SysExEvent, DividedSysExEvent, AnyEvent };

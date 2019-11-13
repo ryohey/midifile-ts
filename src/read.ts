@@ -1,11 +1,11 @@
 import { AnyEvent } from "./event"
-import Stream, { StreamSource } from "./stream"
-import deserialize from "./deserialize"
+import { Stream, StreamSource } from "./stream"
+import { deserialize } from "./deserialize"
 
 export interface MidiHeader {
-    formatType: number
-    trackCount: number
-    ticksPerBeat: number
+  formatType: number
+  trackCount: number
+  ticksPerBeat: number
 }
 
 export interface MidiFile {
@@ -17,7 +17,7 @@ export interface MidiFile {
 class to parse the .mid file format
 (depends on stream.js)
 */
-export default function read(data: StreamSource): MidiFile {
+export function read(data: StreamSource): MidiFile {
   function readChunk(stream: Stream) {
     const id = stream.readStr(4)
     const length = stream.readInt32()

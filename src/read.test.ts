@@ -1,5 +1,5 @@
 import assert from "assert"
-import read from "./read"
+import { read } from "./read"
 import fs from "fs"
 
 describe("reader", () => {

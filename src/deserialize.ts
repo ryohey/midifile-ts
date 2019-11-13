@@ -28,9 +28,9 @@ import {
   UnknownChannelEvent,
   AnyEvent
 } from "./event"
-import Stream from "./stream"
+import { Stream } from "./stream"
 
-export default function deserialize(
+export function deserialize(
   stream: Stream,
   lastEventTypeByte: number,
   setLastEventTypeByte: (eventType: number) => void

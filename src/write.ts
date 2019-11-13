@@ -1,10 +1,10 @@
 import { AnyEvent } from "./event"
-import Buffer from "./buffer"
-import serialize from "./serialize"
+import { Buffer } from "./buffer"
+import { serialize } from "./serialize"
 
 //https://sites.google.com/site/yyagisite/material/smfspec#format
 
-export default function write(tracks: AnyEvent[][], ticksPerBeat = 480) {
+export function write(tracks: AnyEvent[][], ticksPerBeat = 480) {
   const buf = new Buffer()
 
   // header chunk
@@ -25,4 +25,3 @@ export default function write(tracks: AnyEvent[][], ticksPerBeat = 480) {
 
   return buf.toBytes()
 }
-

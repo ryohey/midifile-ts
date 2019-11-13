@@ -1,12 +1,19 @@
 import assert from "assert"
-import write from "./write"
-import read from "./read"
+import { write } from "./write"
+import { read } from "./read"
 import fs from "fs"
 
 describe("reader", () => {
   it("write Buffer", () => {
     const bytes = write([], 480)
-    assert.equal(String.fromCharCode(...Array.from(bytes).slice(0, 4).map(e => (e))), "MThd")
+    assert.equal(
+      String.fromCharCode(
+        ...Array.from(bytes)
+          .slice(0, 4)
+          .map(e => e)
+      ),
+      "MThd"
+    )
   })
   it("read and write back", () => {
     const data = fs.readFileSync("./fixtures/tracks.mid")

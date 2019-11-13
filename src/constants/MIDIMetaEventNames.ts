@@ -1,4 +1,4 @@
-export default {
+export const MIDIMetaEventNames: { [key: number]: string } = {
   0x00: "sequenceNumber",
   0x01: "text",
   0x02: "copyrightNotice",

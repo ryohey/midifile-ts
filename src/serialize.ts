@@ -1,10 +1,10 @@
 import { toVLQ } from "./vlq"
-import toCharCodes from "./toCharCodes"
-import MIDIChannelEvents from "./constants/MIDIChannelEvents"
-import MIDIMetaEvents from "./constants/MIDIMetaEvents"
+import { toCharCodes } from "./toCharCodes"
+import { MIDIChannelEvents } from "./constants/MIDIChannelEvents"
+import { MIDIMetaEvents } from "./constants/MIDIMetaEvents"
 import { AnyEvent } from "./event"
 
-export default function serialize(e: AnyEvent, includeDeltaTime = true) {
+export function serialize(e: AnyEvent, includeDeltaTime = true) {
   const bytes: number[] = []
 
   function add(data: number | number[]) {
