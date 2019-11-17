@@ -1,5 +1,5 @@
 import assert from "assert"
-import Stream from "./stream"
+import { Stream } from "./stream"
 import fs from "fs"
 
 describe("Stream", () => {
@@ -10,7 +10,10 @@ describe("Stream", () => {
   })
   it("read", () => {
     const s = new Stream(data)
-    assert.deepEqual(s.read(4), "MThd".split("").map(s => s.charCodeAt(0)))
+    assert.deepEqual(
+      s.read(4),
+      "MThd".split("").map(s => s.charCodeAt(0))
+    )
   })
   it("readInt8", () => {
     const s = new Stream(data)

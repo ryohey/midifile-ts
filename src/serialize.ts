@@ -4,6 +4,10 @@ import { MIDIChannelEvents } from "./constants/MIDIChannelEvents"
 import { MIDIMetaEvents } from "./constants/MIDIMetaEvents"
 import { AnyEvent } from "./event"
 
+function assertUnreachable(x: never): never {
+  throw new Error("Didn't expect to get here")
+}
+
 export function serialize(e: AnyEvent, includeDeltaTime = true) {
   const bytes: number[] = []
 
@@ -41,6 +45,9 @@ export function serialize(e: AnyEvent, includeDeltaTime = true) {
       add(0xff) // type
       add(subtypeCode) // subtype
       switch (e.subtype) {
+        case "sequenceNumber":
+          add(e.number)
+          break
         case "text":
           addText(e.text)
           break
@@ -54,6 +61,9 @@ export function serialize(e: AnyEvent, includeDeltaTime = true) {
           addText(e.text)
           break
         case "lyrics":
+          addText(e.text)
+          break
+        case "marker":
           addText(e.text)
           break
         case "cuePoint":
@@ -71,6 +81,10 @@ export function serialize(e: AnyEvent, includeDeltaTime = true) {
         case "setTempo": {
           const t = e.microsecondsPerBeat
           addNumbers([(t >> 16) & 0xff, (t >> 8) & 0xff, t & 0xff])
+          break
+        }
+        case "smpteOffset": {
+          console.warn("not implemented yet")
           break
         }
         case "timeSignature": {
@@ -91,8 +105,6 @@ export function serialize(e: AnyEvent, includeDeltaTime = true) {
           break
         case "unknown":
           addNumbers(e.data)
-          break
-        default:
           break
       }
       break
@@ -146,12 +158,9 @@ export function serialize(e: AnyEvent, includeDeltaTime = true) {
         case "unknown":
           add(e.data)
           break
-        default:
-          break
       }
       break
     }
-    default:
   }
 
   return bytes
