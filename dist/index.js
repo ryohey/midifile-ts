@@ -553,6 +553,9 @@ function serialize(e, includeDeltaTime) {
             add(0xff); // type
             add(subtypeCode); // subtype
             switch (e.subtype) {
+                case "sequenceNumber":
+                    add(e.number);
+                    break;
                 case "text":
                     addText(e.text);
                     break;
@@ -566,6 +569,9 @@ function serialize(e, includeDeltaTime) {
                     addText(e.text);
                     break;
                 case "lyrics":
+                    addText(e.text);
+                    break;
+                case "marker":
                     addText(e.text);
                     break;
                 case "cuePoint":
@@ -583,6 +589,10 @@ function serialize(e, includeDeltaTime) {
                 case "setTempo": {
                     var t = e.microsecondsPerBeat;
                     addNumbers([(t >> 16) & 0xff, (t >> 8) & 0xff, t & 0xff]);
+                    break;
+                }
+                case "smpteOffset": {
+                    console.warn("not implemented yet");
                     break;
                 }
                 case "timeSignature": {
