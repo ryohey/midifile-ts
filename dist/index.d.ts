@@ -1,19 +1,3 @@
-/// <reference types="node" />
-/// <reference types="node" />
-declare type StreamSource = DataView | number[] | ArrayBuffer | Buffer | Uint8Array;
-declare class Stream {
-    private buf;
-    private position;
-    constructor(buf: StreamSource);
-    readByte(): number;
-    readStr(length: number): string;
-    read(length: number): number[];
-    readInt32(): number;
-    readInt16(): number;
-    readInt8(signed?: boolean): number;
-    eof(): boolean;
-    readVarInt(): number;
-}
 interface Event<T extends string> {
     deltaTime: number;
     type: T;
@@ -21,6 +5,7 @@ interface Event<T extends string> {
 interface MetaEvent<T extends string> extends Event<"meta"> {
     subtype: T;
 }
+/* Meta */
 interface SequenceNumberEvent extends MetaEvent<"sequenceNumber"> {
     number: number;
 }
@@ -80,6 +65,7 @@ interface SequencerSpecificEvent extends MetaEvent<"sequencerSpecific"> {
 interface UnknownMetaEvent extends MetaEvent<"unknown"> {
     data: number[];
 }
+/* Channel */
 interface ChannelEvent<T extends string> extends Event<"channel"> {
     channel: number;
     subtype: T;
@@ -108,18 +94,41 @@ interface PitchBendEvent extends ChannelEvent<"pitchBend"> {
 interface UnknownChannelEvent extends ChannelEvent<"unknown"> {
     data: number;
 }
+/* Controller */
 interface ControllerEvent extends ChannelEvent<"controller"> {
     controllerType: number;
     value: number;
 }
+/* Other */
 interface SysExEvent extends Event<"sysEx"> {
     data: number[];
 }
 interface DividedSysExEvent extends Event<"dividedSysEx"> {
     data: number[];
 }
-declare type AnyEvent = SequenceNumberEvent | TextEvent | CopyrightNoticeEvent | TrackNameEvent | InstrumentNameEvent | LyricsEvent | MarkerEvent | CuePointEvent | ChannelPrefixEvent | PortPrefixEvent | EndOfTrackEvent | SetTempoEvent | SmpteOffsetEvent | TimeSignatureEvent | KeySignatureEvent | SequencerSpecificEvent | UnknownMetaEvent | NoteOffEvent | NoteOnEvent | NoteAftertouchEvent | ProgramChangeEvent | ChannelAftertouchEvent | PitchBendEvent | UnknownChannelEvent | ControllerEvent | SysExEvent | DividedSysExEvent;
-declare function deserialize(stream: Stream, lastEventTypeByte: number, setLastEventTypeByte: (eventType: number) => void): AnyEvent;
+type AnyEvent = SequenceNumberEvent | TextEvent | CopyrightNoticeEvent | TrackNameEvent | InstrumentNameEvent | LyricsEvent | MarkerEvent | CuePointEvent | ChannelPrefixEvent | PortPrefixEvent | EndOfTrackEvent | SetTempoEvent | SmpteOffsetEvent | TimeSignatureEvent | KeySignatureEvent | SequencerSpecificEvent | UnknownMetaEvent | NoteOffEvent | NoteOnEvent | NoteAftertouchEvent | ProgramChangeEvent | ChannelAftertouchEvent | PitchBendEvent | UnknownChannelEvent | ControllerEvent | SysExEvent | DividedSysExEvent;
+type StreamSource = DataView | number[] | ArrayBuffer | Uint8Array;
+/* Wrapper for accessing strings through sequential reads */
+declare class Stream {
+    private buf;
+    private position;
+    constructor(buf: StreamSource);
+    readByte(): number;
+    readStr(length: number): string;
+    read(length: number): number[];
+    /* read a big-endian 32-bit integer */
+    readInt32(): number;
+    /* read a big-endian 16-bit integer */
+    readInt16(): number;
+    /* read an 8-bit integer */
+    readInt8(signed?: boolean): number;
+    eof(): boolean;
+    /* read a MIDI-style variable-length integer
+    (big-endian value in groups of 7 bits,
+    with top bit set to signify that another byte follows)
+    */
+    readVarInt(): number;
+}
 interface MidiHeader {
     formatType: number;
     trackCount: number;
@@ -129,32 +138,26 @@ interface MidiFile {
     header: MidiHeader;
     tracks: AnyEvent[][];
 }
+/*
+class to parse the .mid file format
+(depends on stream.js)
+*/
 declare function read(data: StreamSource): MidiFile;
-declare class Buffer {
-    private data;
-    private position;
-    get length(): number;
-    writeByte(v: number): void;
-    writeStr(str: string): void;
-    writeInt32(v: number): void;
-    writeInt16(v: number): void;
-    writeBytes(arr: number[]): void;
-    writeChunk(id: string, func: (buf: Buffer) => void): void;
-    toBytes(): Uint8Array;
-}
+//https://sites.google.com/site/yyagisite/material/smfspec#format
+declare function write(tracks: AnyEvent[][], ticksPerBeat?: number): Uint8Array;
+declare function serialize(e: AnyEvent, includeDeltaTime?: boolean): number[];
+declare function deserialize(stream: Stream, lastEventTypeByte: number, setLastEventTypeByte: (eventType: number) => void): AnyEvent;
 declare const MIDIChannelEvents: {
     [key: string]: number;
 };
-declare const MIDIMetaEvents: {
-    [key: string]: number;
-};
-declare function serialize(e: AnyEvent, includeDeltaTime?: boolean): number[];
-declare function write(tracks: AnyEvent[][], ticksPerBeat?: number): Uint8Array;
 declare const MIDIControlEventNames: string[];
 declare const MIDIControlEvents: {
     [key: string]: number;
 };
 declare const MIDIMetaEventNames: {
     [key: number]: string;
+};
+declare const MIDIMetaEvents: {
+    [key: string]: number;
 };
 export { read, MidiFile, MidiHeader, write, serialize, deserialize, MIDIChannelEvents, MIDIControlEventNames, MIDIControlEvents, MIDIMetaEventNames, MIDIMetaEvents, StreamSource, Event, MetaEvent, SequenceNumberEvent, TextEvent, CopyrightNoticeEvent, TrackNameEvent, InstrumentNameEvent, LyricsEvent, MarkerEvent, CuePointEvent, ChannelPrefixEvent, PortPrefixEvent, EndOfTrackEvent, SetTempoEvent, SmpteOffsetEvent, TimeSignatureEvent, KeySignatureEvent, SequencerSpecificEvent, UnknownMetaEvent, ChannelEvent, NoteOffEvent, NoteOnEvent, NoteAftertouchEvent, ProgramChangeEvent, ChannelAftertouchEvent, PitchBendEvent, UnknownChannelEvent, ControllerEvent, SysExEvent, DividedSysExEvent, AnyEvent };

@@ -12,9 +12,6 @@ var Stream = /** @class */ (function () {
         else if (buf instanceof ArrayBuffer) {
             this.buf = new DataView(buf);
         }
-        else if (buf instanceof Buffer) {
-            this.buf = new DataView(buf.buffer);
-        }
         else if (buf instanceof Array) {
             this.buf = new DataView(new Uint8Array(buf).buffer);
         }
@@ -95,11 +92,11 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
             /* meta event */
             var type = "meta";
             var subtypeByte = stream.readInt8();
-            var length_1 = stream.readVarInt();
+            var length = stream.readVarInt();
             switch (subtypeByte) {
                 case 0x00:
-                    if (length_1 !== 2)
-                        throw new Error("Expected length for sequenceNumber event is 2, got " + length_1);
+                    if (length !== 2)
+                        throw new Error("Expected length for sequenceNumber event is 2, got " + length);
                     return {
                         deltaTime: deltaTime,
                         type: type,
@@ -111,53 +108,53 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "text",
-                        text: stream.readStr(length_1)
+                        text: stream.readStr(length)
                     };
                 case 0x02:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "copyrightNotice",
-                        text: stream.readStr(length_1)
+                        text: stream.readStr(length)
                     };
                 case 0x03:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "trackName",
-                        text: stream.readStr(length_1)
+                        text: stream.readStr(length)
                     };
                 case 0x04:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "instrumentName",
-                        text: stream.readStr(length_1)
+                        text: stream.readStr(length)
                     };
                 case 0x05:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "lyrics",
-                        text: stream.readStr(length_1)
+                        text: stream.readStr(length)
                     };
                 case 0x06:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "marker",
-                        text: stream.readStr(length_1)
+                        text: stream.readStr(length)
                     };
                 case 0x07:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "cuePoint",
-                        text: stream.readStr(length_1)
+                        text: stream.readStr(length)
                     };
                 case 0x20:
-                    if (length_1 !== 1)
-                        throw new Error("Expected length for midiChannelPrefix event is 1, got " + length_1);
+                    if (length !== 1)
+                        throw new Error("Expected length for midiChannelPrefix event is 1, got " + length);
                     return {
                         deltaTime: deltaTime,
                         type: type,
@@ -165,8 +162,8 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         channel: stream.readInt8()
                     };
                 case 0x21:
-                    if (length_1 !== 1)
-                        throw new Error("Expected length for midiChannelPrefix event is 1, got " + length_1);
+                    if (length !== 1)
+                        throw new Error("Expected length for midiChannelPrefix event is 1, got " + length);
                     return {
                         deltaTime: deltaTime,
                         type: type,
@@ -174,16 +171,16 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         port: stream.readInt8()
                     };
                 case 0x2f:
-                    if (length_1 !== 0)
-                        throw new Error("Expected length for endOfTrack event is 0, got " + length_1);
+                    if (length !== 0)
+                        throw new Error("Expected length for endOfTrack event is 0, got " + length);
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "endOfTrack"
                     };
                 case 0x51:
-                    if (length_1 !== 3)
-                        throw new Error("Expected length for setTempo event is 3, got " + length_1);
+                    if (length !== 3)
+                        throw new Error("Expected length for setTempo event is 3, got " + length);
                     return {
                         deltaTime: deltaTime,
                         type: type,
@@ -193,8 +190,8 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                             stream.readInt8()
                     };
                 case 0x54: {
-                    if (length_1 !== 5)
-                        throw new Error("Expected length for smpteOffset event is 5, got " + length_1);
+                    if (length !== 5)
+                        throw new Error("Expected length for smpteOffset event is 5, got " + length);
                     var hourByte = stream.readInt8();
                     var table = {
                         0x00: 24,
@@ -215,8 +212,8 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     };
                 }
                 case 0x58:
-                    if (length_1 !== 4)
-                        throw new Error("Expected length for timeSignature event is 4, got " + length_1);
+                    if (length !== 4)
+                        throw new Error("Expected length for timeSignature event is 4, got " + length);
                     return {
                         deltaTime: deltaTime,
                         type: type,
@@ -227,8 +224,8 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         thirtyseconds: stream.readInt8()
                     };
                 case 0x59:
-                    if (length_1 !== 2)
-                        throw new Error("Expected length for keySignature event is 2, got " + length_1);
+                    if (length !== 2)
+                        throw new Error("Expected length for keySignature event is 2, got " + length);
                     return {
                         deltaTime: deltaTime,
                         type: type,
@@ -241,31 +238,31 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "sequencerSpecific",
-                        data: stream.read(length_1)
+                        data: stream.read(length)
                     };
                 default:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "unknown",
-                        data: stream.read(length_1)
+                        data: stream.read(length)
                     };
             }
         }
         else if (eventTypeByte === 0xf0) {
-            var length_2 = stream.readVarInt();
+            var length = stream.readVarInt();
             return {
                 deltaTime: deltaTime,
                 type: "sysEx",
-                data: stream.read(length_2)
+                data: stream.read(length)
             };
         }
         else if (eventTypeByte === 0xf7) {
-            var length_3 = stream.readVarInt();
+            var length = stream.readVarInt();
             return {
                 deltaTime: deltaTime,
                 type: "dividedSysEx",
-                data: stream.read(length_3)
+                data: stream.read(length)
             };
         }
         else {
@@ -412,8 +409,8 @@ function read(data) {
         }
         var trackStream = new Stream(trackChunk.data);
         while (!trackStream.eof()) {
-            var event_1 = readEvent(trackStream);
-            tracks[i].push(event_1);
+            var event = readEvent(trackStream);
+            tracks[i].push(event);
         }
     }
     return {
@@ -430,7 +427,7 @@ function toCharCodes(str) {
     return bytes;
 }
 
-var Buffer$1 = /** @class */ (function () {
+var Buffer = /** @class */ (function () {
     function Buffer() {
         this.data = [];
         this.position = 0;
@@ -439,7 +436,7 @@ var Buffer$1 = /** @class */ (function () {
         get: function () {
             return this.data.length;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Buffer.prototype.writeByte = function (v) {
@@ -676,7 +673,7 @@ function serialize(e, includeDeltaTime) {
 //https://sites.google.com/site/yyagisite/material/smfspec#format
 function write(tracks, ticksPerBeat) {
     if (ticksPerBeat === void 0) { ticksPerBeat = 480; }
-    var buf = new Buffer$1();
+    var buf = new Buffer();
     // header chunk
     buf.writeChunk("MThd", function (it) {
         it.writeInt16(1); // formatType
@@ -686,8 +683,8 @@ function write(tracks, ticksPerBeat) {
     var _loop_1 = function (track) {
         buf.writeChunk("MTrk", function (it) {
             for (var _i = 0, track_1 = track; _i < track_1.length; _i++) {
-                var event_1 = track_1[_i];
-                it.writeBytes(serialize(event_1));
+                var event = track_1[_i];
+                it.writeBytes(serialize(event));
             }
         });
     };
