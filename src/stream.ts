@@ -2,7 +2,6 @@ export type StreamSource =
   | DataView
   | number[]
   | ArrayBuffer
-  | Buffer
   | Uint8Array
 
 /* Wrapper for accessing strings through sequential reads */
@@ -15,8 +14,6 @@ export class Stream {
       this.buf = buf
     } else if (buf instanceof ArrayBuffer) {
       this.buf = new DataView(buf)
-    } else if (buf instanceof Buffer) {
-      this.buf = new DataView(buf.buffer)
     } else if (buf instanceof Array) {
       this.buf = new DataView(new Uint8Array(buf).buffer)
     } else if (buf instanceof Uint8Array) {
