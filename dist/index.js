@@ -870,6 +870,7 @@ exports.MIDIControlEventNames = MIDIControlEventNames;
 exports.MIDIControlEvents = MIDIControlEvents;
 exports.MIDIMetaEventNames = MIDIMetaEventNames;
 exports.MIDIMetaEvents = MIDIMetaEvents;
+exports.Stream = Stream;
 exports.deserialize = deserialize;
 exports.read = read;
 exports.serialize = serialize;
