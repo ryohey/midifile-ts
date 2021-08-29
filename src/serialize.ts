@@ -1,8 +1,8 @@
-import { toVLQ } from "./vlq"
-import { toCharCodes } from "./toCharCodes"
 import { MIDIChannelEvents } from "./constants/MIDIChannelEvents"
 import { MIDIMetaEvents } from "./constants/MIDIMetaEvents"
 import { AnyEvent } from "./event"
+import { toCharCodes } from "./toCharCodes"
+import { toVLQ } from "./vlq"
 
 function assertUnreachable(x: never): never {
   throw new Error("Didn't expect to get here")
@@ -28,7 +28,7 @@ export function serialize(e: AnyEvent, includeDeltaTime = true) {
 
   function addNumbers(list: number[]) {
     add(list.length)
-    list.forEach(v => add(v))
+    list.forEach((v) => add(v))
   }
 
   function addText(text: string) {
@@ -70,7 +70,7 @@ export function serialize(e: AnyEvent, includeDeltaTime = true) {
           addText(e.text)
           break
         case "midiChannelPrefix":
-          addNumbers([e.channel])
+          addNumbers([e.value])
           break
         case "portPrefix":
           addNumbers([e.port])
@@ -92,7 +92,7 @@ export function serialize(e: AnyEvent, includeDeltaTime = true) {
             e.numerator,
             Math.log2(e.denominator),
             e.metronome,
-            e.thirtyseconds
+            e.thirtyseconds,
           ])
           break
         }

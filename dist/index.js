@@ -101,56 +101,56 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "sequenceNumber",
-                        number: stream.readInt16()
+                        number: stream.readInt16(),
                     };
                 case 0x01:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "text",
-                        text: stream.readStr(length)
+                        text: stream.readStr(length),
                     };
                 case 0x02:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "copyrightNotice",
-                        text: stream.readStr(length)
+                        text: stream.readStr(length),
                     };
                 case 0x03:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "trackName",
-                        text: stream.readStr(length)
+                        text: stream.readStr(length),
                     };
                 case 0x04:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "instrumentName",
-                        text: stream.readStr(length)
+                        text: stream.readStr(length),
                     };
                 case 0x05:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "lyrics",
-                        text: stream.readStr(length)
+                        text: stream.readStr(length),
                     };
                 case 0x06:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "marker",
-                        text: stream.readStr(length)
+                        text: stream.readStr(length),
                     };
                 case 0x07:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "cuePoint",
-                        text: stream.readStr(length)
+                        text: stream.readStr(length),
                     };
                 case 0x20:
                     if (length !== 1)
@@ -159,7 +159,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "midiChannelPrefix",
-                        channel: stream.readInt8()
+                        value: stream.readInt8(),
                     };
                 case 0x21:
                     if (length !== 1)
@@ -168,7 +168,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "portPrefix",
-                        port: stream.readInt8()
+                        port: stream.readInt8(),
                     };
                 case 0x2f:
                     if (length !== 0)
@@ -176,7 +176,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     return {
                         deltaTime: deltaTime,
                         type: type,
-                        subtype: "endOfTrack"
+                        subtype: "endOfTrack",
                     };
                 case 0x51:
                     if (length !== 3)
@@ -187,7 +187,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         subtype: "setTempo",
                         microsecondsPerBeat: (stream.readInt8() << 16) +
                             (stream.readInt8() << 8) +
-                            stream.readInt8()
+                            stream.readInt8(),
                     };
                 case 0x54: {
                     if (length !== 5)
@@ -197,7 +197,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         0x00: 24,
                         0x20: 25,
                         0x40: 29,
-                        0x60: 30
+                        0x60: 30,
                     };
                     return {
                         deltaTime: deltaTime,
@@ -208,7 +208,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         min: stream.readInt8(),
                         sec: stream.readInt8(),
                         frame: stream.readInt8(),
-                        subframe: stream.readInt8()
+                        subframe: stream.readInt8(),
                     };
                 }
                 case 0x58:
@@ -221,7 +221,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         numerator: stream.readInt8(),
                         denominator: Math.pow(2, stream.readInt8()),
                         metronome: stream.readInt8(),
-                        thirtyseconds: stream.readInt8()
+                        thirtyseconds: stream.readInt8(),
                     };
                 case 0x59:
                     if (length !== 2)
@@ -231,21 +231,21 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                         type: type,
                         subtype: "keySignature",
                         key: stream.readInt8(true),
-                        scale: stream.readInt8()
+                        scale: stream.readInt8(),
                     };
                 case 0x7f:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "sequencerSpecific",
-                        data: stream.read(length)
+                        data: stream.read(length),
                     };
                 default:
                     return {
                         deltaTime: deltaTime,
                         type: type,
                         subtype: "unknown",
-                        data: stream.read(length)
+                        data: stream.read(length),
                     };
             }
         }
@@ -254,7 +254,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
             return {
                 deltaTime: deltaTime,
                 type: "sysEx",
-                data: stream.read(length)
+                data: stream.read(length),
             };
         }
         else if (eventTypeByte === 0xf7) {
@@ -262,7 +262,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
             return {
                 deltaTime: deltaTime,
                 type: "dividedSysEx",
-                data: stream.read(length)
+                data: stream.read(length),
             };
         }
         else {
@@ -294,7 +294,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     channel: channel,
                     subtype: "noteOff",
                     noteNumber: param1,
-                    velocity: stream.readInt8()
+                    velocity: stream.readInt8(),
                 };
             case 0x09: {
                 var velocity = stream.readInt8();
@@ -304,7 +304,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     channel: channel,
                     subtype: velocity === 0 ? "noteOff" : "noteOn",
                     noteNumber: param1,
-                    velocity: velocity
+                    velocity: velocity,
                 };
             }
             case 0x0a:
@@ -314,7 +314,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     channel: channel,
                     subtype: "noteAftertouch",
                     noteNumber: param1,
-                    amount: stream.readInt8()
+                    amount: stream.readInt8(),
                 };
             case 0x0b:
                 return {
@@ -323,7 +323,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     channel: channel,
                     subtype: "controller",
                     controllerType: param1,
-                    value: stream.readInt8()
+                    value: stream.readInt8(),
                 };
             case 0x0c:
                 return {
@@ -331,7 +331,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     type: type,
                     channel: channel,
                     subtype: "programChange",
-                    value: param1
+                    value: param1,
                 };
             case 0x0d:
                 return {
@@ -339,7 +339,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     type: type,
                     channel: channel,
                     subtype: "channelAftertouch",
-                    amount: param1
+                    amount: param1,
                 };
             case 0x0e:
                 return {
@@ -347,7 +347,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     type: type,
                     channel: channel,
                     subtype: "pitchBend",
-                    value: param1 + (stream.readInt8() << 7)
+                    value: param1 + (stream.readInt8() << 7),
                 };
             default:
                 return {
@@ -355,7 +355,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
                     type: type,
                     channel: channel,
                     subtype: "unknown",
-                    data: stream.readInt8()
+                    data: stream.readInt8(),
                 };
         }
     }
@@ -473,20 +473,6 @@ var Buffer = /** @class */ (function () {
     return Buffer;
 }());
 
-// variable-length quantity
-function toVLQ(intNum) {
-    var v = intNum;
-    var r = [v & 0x7f];
-    while (true) {
-        v >>= 7;
-        if (v === 0) {
-            break;
-        }
-        r.unshift(0x80 + (v & 0x7f));
-    }
-    return r;
-}
-
 var MIDIChannelEvents = {
     noteOff: 0x08,
     noteOn: 0x09,
@@ -515,6 +501,20 @@ var MIDIMetaEvents = {
     keySignature: 0x59,
     sequencerSpecific: 0x7f
 };
+
+// variable-length quantity
+function toVLQ(intNum) {
+    var v = intNum;
+    var r = [v & 0x7f];
+    while (true) {
+        v >>= 7;
+        if (v === 0) {
+            break;
+        }
+        r.unshift(0x80 + (v & 0x7f));
+    }
+    return r;
+}
 
 function serialize(e, includeDeltaTime) {
     if (includeDeltaTime === void 0) { includeDeltaTime = true; }
@@ -575,7 +575,7 @@ function serialize(e, includeDeltaTime) {
                     addText(e.text);
                     break;
                 case "midiChannelPrefix":
-                    addNumbers([e.channel]);
+                    addNumbers([e.value]);
                     break;
                 case "portPrefix":
                     addNumbers([e.port]);
@@ -597,7 +597,7 @@ function serialize(e, includeDeltaTime) {
                         e.numerator,
                         Math.log2(e.denominator),
                         e.metronome,
-                        e.thirtyseconds
+                        e.thirtyseconds,
                     ]);
                     break;
                 }
@@ -875,3 +875,4 @@ exports.deserialize = deserialize;
 exports.read = read;
 exports.serialize = serialize;
 exports.write = write;
+//# sourceMappingURL=index.js.map

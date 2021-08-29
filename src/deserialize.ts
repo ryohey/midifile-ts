@@ -1,32 +1,32 @@
 import {
-  SequenceNumberEvent,
-  TextEvent,
+  AnyEvent,
+  ChannelAftertouchEvent,
+  ChannelPrefixEvent,
+  ControllerEvent,
   CopyrightNoticeEvent,
-  TrackNameEvent,
+  CuePointEvent,
+  DividedSysExEvent,
+  EndOfTrackEvent,
   InstrumentNameEvent,
+  KeySignatureEvent,
   LyricsEvent,
   MarkerEvent,
-  CuePointEvent,
-  ChannelPrefixEvent,
-  PortPrefixEvent,
-  EndOfTrackEvent,
-  SetTempoEvent,
-  SmpteOffsetEvent,
-  TimeSignatureEvent,
-  KeySignatureEvent,
-  SequencerSpecificEvent,
-  UnknownMetaEvent,
-  SysExEvent,
-  DividedSysExEvent,
+  NoteAftertouchEvent,
   NoteOffEvent,
   NoteOnEvent,
-  NoteAftertouchEvent,
-  ControllerEvent,
-  ProgramChangeEvent,
-  ChannelAftertouchEvent,
   PitchBendEvent,
+  PortPrefixEvent,
+  ProgramChangeEvent,
+  SequenceNumberEvent,
+  SequencerSpecificEvent,
+  SetTempoEvent,
+  SmpteOffsetEvent,
+  SysExEvent,
+  TextEvent,
+  TimeSignatureEvent,
+  TrackNameEvent,
   UnknownChannelEvent,
-  AnyEvent
+  UnknownMetaEvent,
 } from "./event"
 import { Stream } from "./stream"
 
@@ -54,56 +54,56 @@ export function deserialize(
             deltaTime,
             type,
             subtype: "sequenceNumber",
-            number: stream.readInt16()
+            number: stream.readInt16(),
           }
         case 0x01:
           return <TextEvent>{
             deltaTime,
             type,
             subtype: "text",
-            text: stream.readStr(length)
+            text: stream.readStr(length),
           }
         case 0x02:
           return <CopyrightNoticeEvent>{
             deltaTime,
             type,
             subtype: "copyrightNotice",
-            text: stream.readStr(length)
+            text: stream.readStr(length),
           }
         case 0x03:
           return <TrackNameEvent>{
             deltaTime,
             type,
             subtype: "trackName",
-            text: stream.readStr(length)
+            text: stream.readStr(length),
           }
         case 0x04:
           return <InstrumentNameEvent>{
             deltaTime,
             type,
             subtype: "instrumentName",
-            text: stream.readStr(length)
+            text: stream.readStr(length),
           }
         case 0x05:
           return <LyricsEvent>{
             deltaTime,
             type,
             subtype: "lyrics",
-            text: stream.readStr(length)
+            text: stream.readStr(length),
           }
         case 0x06:
           return <MarkerEvent>{
             deltaTime,
             type,
             subtype: "marker",
-            text: stream.readStr(length)
+            text: stream.readStr(length),
           }
         case 0x07:
           return <CuePointEvent>{
             deltaTime,
             type,
             subtype: "cuePoint",
-            text: stream.readStr(length)
+            text: stream.readStr(length),
           }
         case 0x20:
           if (length !== 1)
@@ -114,7 +114,7 @@ export function deserialize(
             deltaTime,
             type,
             subtype: "midiChannelPrefix",
-            channel: stream.readInt8()
+            value: stream.readInt8(),
           }
         case 0x21:
           if (length !== 1)
@@ -125,7 +125,7 @@ export function deserialize(
             deltaTime,
             type,
             subtype: "portPrefix",
-            port: stream.readInt8()
+            port: stream.readInt8(),
           }
         case 0x2f:
           if (length !== 0)
@@ -135,7 +135,7 @@ export function deserialize(
           return <EndOfTrackEvent>{
             deltaTime,
             type,
-            subtype: "endOfTrack"
+            subtype: "endOfTrack",
           }
         case 0x51:
           if (length !== 3)
@@ -149,7 +149,7 @@ export function deserialize(
             microsecondsPerBeat:
               (stream.readInt8() << 16) +
               (stream.readInt8() << 8) +
-              stream.readInt8()
+              stream.readInt8(),
           }
         case 0x54: {
           if (length !== 5)
@@ -161,7 +161,7 @@ export function deserialize(
             0x00: 24,
             0x20: 25,
             0x40: 29,
-            0x60: 30
+            0x60: 30,
           }
           return <SmpteOffsetEvent>{
             deltaTime,
@@ -172,7 +172,7 @@ export function deserialize(
             min: stream.readInt8(),
             sec: stream.readInt8(),
             frame: stream.readInt8(),
-            subframe: stream.readInt8()
+            subframe: stream.readInt8(),
           }
         }
         case 0x58:
@@ -187,7 +187,7 @@ export function deserialize(
             numerator: stream.readInt8(),
             denominator: Math.pow(2, stream.readInt8()),
             metronome: stream.readInt8(),
-            thirtyseconds: stream.readInt8()
+            thirtyseconds: stream.readInt8(),
           }
         case 0x59:
           if (length !== 2)
@@ -199,21 +199,21 @@ export function deserialize(
             type,
             subtype: "keySignature",
             key: stream.readInt8(true),
-            scale: stream.readInt8()
+            scale: stream.readInt8(),
           }
         case 0x7f:
           return <SequencerSpecificEvent>{
             deltaTime,
             type,
             subtype: "sequencerSpecific",
-            data: stream.read(length)
+            data: stream.read(length),
           }
         default:
           return <UnknownMetaEvent>{
             deltaTime,
             type,
             subtype: "unknown",
-            data: stream.read(length)
+            data: stream.read(length),
           }
       }
     } else if (eventTypeByte === 0xf0) {
@@ -221,14 +221,14 @@ export function deserialize(
       return <SysExEvent>{
         deltaTime,
         type: "sysEx",
-        data: stream.read(length)
+        data: stream.read(length),
       }
     } else if (eventTypeByte === 0xf7) {
       const length = stream.readVarInt()
       return <DividedSysExEvent>{
         deltaTime,
         type: "dividedSysEx",
-        data: stream.read(length)
+        data: stream.read(length),
       }
     } else {
       throw new Error("Unrecognised MIDI event type byte: " + eventTypeByte)
@@ -257,7 +257,7 @@ export function deserialize(
           channel,
           subtype: "noteOff",
           noteNumber: param1,
-          velocity: stream.readInt8()
+          velocity: stream.readInt8(),
         }
       case 0x09: {
         const velocity = stream.readInt8()
@@ -267,7 +267,7 @@ export function deserialize(
           channel,
           subtype: velocity === 0 ? "noteOff" : "noteOn",
           noteNumber: param1,
-          velocity: velocity
+          velocity: velocity,
         }
       }
       case 0x0a:
@@ -277,7 +277,7 @@ export function deserialize(
           channel,
           subtype: "noteAftertouch",
           noteNumber: param1,
-          amount: stream.readInt8()
+          amount: stream.readInt8(),
         }
       case 0x0b:
         return <ControllerEvent>{
@@ -286,7 +286,7 @@ export function deserialize(
           channel,
           subtype: "controller",
           controllerType: param1,
-          value: stream.readInt8()
+          value: stream.readInt8(),
         }
       case 0x0c:
         return <ProgramChangeEvent>{
@@ -294,7 +294,7 @@ export function deserialize(
           type,
           channel,
           subtype: "programChange",
-          value: param1
+          value: param1,
         }
       case 0x0d:
         return <ChannelAftertouchEvent>{
@@ -302,7 +302,7 @@ export function deserialize(
           type,
           channel,
           subtype: "channelAftertouch",
-          amount: param1
+          amount: param1,
         }
       case 0x0e:
         return <PitchBendEvent>{
@@ -310,7 +310,7 @@ export function deserialize(
           type,
           channel,
           subtype: "pitchBend",
-          value: param1 + (stream.readInt8() << 7)
+          value: param1 + (stream.readInt8() << 7),
         }
       default:
         return <UnknownChannelEvent>{
@@ -318,7 +318,7 @@ export function deserialize(
           type,
           channel,
           subtype: "unknown",
-          data: stream.readInt8()
+          data: stream.readInt8(),
         }
     }
   }
