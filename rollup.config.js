@@ -1,11 +1,10 @@
-import typescript from "@rollup/plugin-typescript"
+import ts from "@wessberg/rollup-plugin-ts"
 
 export default {
   input: "./src/index.ts",
   output: {
     file: "dist/index.js",
-    format: "cjs",
-    sourcemap: true,
+    format: "cjs"
   },
-  plugins: [typescript()],
+  plugins: [ts()]
 }
