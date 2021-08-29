@@ -42,7 +42,7 @@ export interface CuePointEvent extends MetaEvent<"cuePoint"> {
 }
 
 export interface ChannelPrefixEvent extends MetaEvent<"midiChannelPrefix"> {
-  channel: number
+  value: number
 }
 
 export interface PortPrefixEvent extends MetaEvent<"portPrefix"> {
