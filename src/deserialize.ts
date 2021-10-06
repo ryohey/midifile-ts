@@ -1,3 +1,5 @@
+import { MIDIChannelEvents } from "."
+import { MIDIMetaEvents } from "./constants/MIDIMetaEvents"
 import {
   AnyEvent,
   ChannelAftertouchEvent,
@@ -45,7 +47,7 @@ export function deserialize(
       const subtypeByte = stream.readInt8()
       const length = stream.readVarInt()
       switch (subtypeByte) {
-        case 0x00:
+        case MIDIMetaEvents.sequenceNumber:
           if (length !== 2)
             throw new Error(
               "Expected length for sequenceNumber event is 2, got " + length
@@ -56,56 +58,56 @@ export function deserialize(
             subtype: "sequenceNumber",
             number: stream.readInt16(),
           }
-        case 0x01:
+        case MIDIMetaEvents.text:
           return <TextEvent>{
             deltaTime,
             type,
             subtype: "text",
             text: stream.readStr(length),
           }
-        case 0x02:
+        case MIDIMetaEvents.copyrightNotice:
           return <CopyrightNoticeEvent>{
             deltaTime,
             type,
             subtype: "copyrightNotice",
             text: stream.readStr(length),
           }
-        case 0x03:
+        case MIDIMetaEvents.trackName:
           return <TrackNameEvent>{
             deltaTime,
             type,
             subtype: "trackName",
             text: stream.readStr(length),
           }
-        case 0x04:
+        case MIDIMetaEvents.instrumentName:
           return <InstrumentNameEvent>{
             deltaTime,
             type,
             subtype: "instrumentName",
             text: stream.readStr(length),
           }
-        case 0x05:
+        case MIDIMetaEvents.lyrics:
           return <LyricsEvent>{
             deltaTime,
             type,
             subtype: "lyrics",
             text: stream.readStr(length),
           }
-        case 0x06:
+        case MIDIMetaEvents.marker:
           return <MarkerEvent>{
             deltaTime,
             type,
             subtype: "marker",
             text: stream.readStr(length),
           }
-        case 0x07:
+        case MIDIMetaEvents.cuePoint:
           return <CuePointEvent>{
             deltaTime,
             type,
             subtype: "cuePoint",
             text: stream.readStr(length),
           }
-        case 0x20:
+        case MIDIMetaEvents.midiChannelPrefix:
           if (length !== 1)
             throw new Error(
               "Expected length for midiChannelPrefix event is 1, got " + length
@@ -116,7 +118,7 @@ export function deserialize(
             subtype: "midiChannelPrefix",
             value: stream.readInt8(),
           }
-        case 0x21:
+        case MIDIMetaEvents.portPrefix:
           if (length !== 1)
             throw new Error(
               "Expected length for midiChannelPrefix event is 1, got " + length
@@ -127,7 +129,7 @@ export function deserialize(
             subtype: "portPrefix",
             port: stream.readInt8(),
           }
-        case 0x2f:
+        case MIDIMetaEvents.endOfTrack:
           if (length !== 0)
             throw new Error(
               "Expected length for endOfTrack event is 0, got " + length
@@ -137,7 +139,7 @@ export function deserialize(
             type,
             subtype: "endOfTrack",
           }
-        case 0x51:
+        case MIDIMetaEvents.setTempo:
           if (length !== 3)
             throw new Error(
               "Expected length for setTempo event is 3, got " + length
@@ -151,7 +153,7 @@ export function deserialize(
               (stream.readInt8() << 8) +
               stream.readInt8(),
           }
-        case 0x54: {
+        case MIDIMetaEvents.smpteOffset: {
           if (length !== 5)
             throw new Error(
               "Expected length for smpteOffset event is 5, got " + length
@@ -175,7 +177,7 @@ export function deserialize(
             subframe: stream.readInt8(),
           }
         }
-        case 0x58:
+        case MIDIMetaEvents.timeSignature:
           if (length !== 4)
             throw new Error(
               "Expected length for timeSignature event is 4, got " + length
@@ -189,7 +191,7 @@ export function deserialize(
             metronome: stream.readInt8(),
             thirtyseconds: stream.readInt8(),
           }
-        case 0x59:
+        case MIDIMetaEvents.keySignature:
           if (length !== 2)
             throw new Error(
               "Expected length for keySignature event is 2, got " + length
@@ -201,7 +203,7 @@ export function deserialize(
             key: stream.readInt8(true),
             scale: stream.readInt8(),
           }
-        case 0x7f:
+        case MIDIMetaEvents.sequencerSpecific:
           return <SequencerSpecificEvent>{
             deltaTime,
             type,
@@ -250,7 +252,7 @@ export function deserialize(
     const channel = eventTypeByte & 0x0f
     const type = "channel"
     switch (eventType) {
-      case 0x08:
+      case MIDIChannelEvents.noteOff:
         return <NoteOffEvent>{
           deltaTime,
           type,
@@ -259,7 +261,7 @@ export function deserialize(
           noteNumber: param1,
           velocity: stream.readInt8(),
         }
-      case 0x09: {
+      case MIDIChannelEvents.noteOn: {
         const velocity = stream.readInt8()
         return <NoteOnEvent>{
           deltaTime,
@@ -270,7 +272,7 @@ export function deserialize(
           velocity: velocity,
         }
       }
-      case 0x0a:
+      case MIDIChannelEvents.noteAftertouch:
         return <NoteAftertouchEvent>{
           deltaTime,
           type,
@@ -279,7 +281,7 @@ export function deserialize(
           noteNumber: param1,
           amount: stream.readInt8(),
         }
-      case 0x0b:
+      case MIDIChannelEvents.controller:
         return <ControllerEvent>{
           deltaTime,
           type,
@@ -288,7 +290,7 @@ export function deserialize(
           controllerType: param1,
           value: stream.readInt8(),
         }
-      case 0x0c:
+      case MIDIChannelEvents.programChange:
         return <ProgramChangeEvent>{
           deltaTime,
           type,
@@ -296,7 +298,7 @@ export function deserialize(
           subtype: "programChange",
           value: param1,
         }
-      case 0x0d:
+      case MIDIChannelEvents.channelAftertouch:
         return <ChannelAftertouchEvent>{
           deltaTime,
           type,
@@ -304,7 +306,7 @@ export function deserialize(
           subtype: "channelAftertouch",
           amount: param1,
         }
-      case 0x0e:
+      case MIDIChannelEvents.pitchBend:
         return <PitchBendEvent>{
           deltaTime,
           type,
