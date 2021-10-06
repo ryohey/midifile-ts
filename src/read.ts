@@ -1,6 +1,6 @@
+import { deserialize } from "./deserialize"
 import { AnyEvent } from "./event"
 import { Stream, StreamSource } from "./stream"
-import { deserialize } from "./deserialize"
 
 export interface MidiHeader {
   formatType: number
@@ -24,7 +24,7 @@ export function read(data: StreamSource): MidiFile {
     return {
       id,
       length,
-      data: stream.read(length)
+      data: stream.read(length),
     }
   }
 
@@ -50,7 +50,7 @@ export function read(data: StreamSource): MidiFile {
   const header = {
     formatType,
     trackCount,
-    ticksPerBeat
+    ticksPerBeat,
   }
 
   let lastEventTypeByte: number
@@ -58,7 +58,7 @@ export function read(data: StreamSource): MidiFile {
     return deserialize(
       stream,
       lastEventTypeByte,
-      byte => (lastEventTypeByte = byte)
+      (byte) => (lastEventTypeByte = byte)
     )
   }
 
@@ -78,6 +78,6 @@ export function read(data: StreamSource): MidiFile {
 
   return {
     header,
-    tracks
+    tracks,
   }
 }

@@ -1,5 +1,5 @@
-import { AnyEvent } from "./event"
 import { Buffer } from "./buffer"
+import { AnyEvent } from "./event"
 import { serialize } from "./serialize"
 
 //https://sites.google.com/site/yyagisite/material/smfspec#format
@@ -8,7 +8,7 @@ export function write(tracks: AnyEvent[][], ticksPerBeat = 480) {
   const buf = new Buffer()
 
   // header chunk
-  buf.writeChunk("MThd", it => {
+  buf.writeChunk("MThd", (it) => {
     it.writeInt16(1) // formatType
     it.writeInt16(tracks.length) // trackCount
     it.writeInt16(ticksPerBeat) // timeDivision
@@ -16,7 +16,7 @@ export function write(tracks: AnyEvent[][], ticksPerBeat = 480) {
 
   // track chunk
   for (const track of tracks) {
-    buf.writeChunk("MTrk", it => {
+    buf.writeChunk("MTrk", (it) => {
       for (const event of track) {
         it.writeBytes(serialize(event))
       }
