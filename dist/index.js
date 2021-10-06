@@ -2,6 +2,482 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var MIDIChannelEvents = {
+    noteOff: 0x08,
+    noteOn: 0x09,
+    noteAftertouch: 0x0a,
+    controller: 0x0b,
+    programChange: 0x0c,
+    channelAftertouch: 0x0d,
+    pitchBend: 0x0e,
+};
+
+var MIDIControlEventNames = [
+    "Bank Select",
+    "Modulation",
+    "Breath Controller",
+    "Foot Pedal",
+    "Portamento Time",
+    "Data Entry",
+    "Volume",
+    "Balance",
+    "Pan",
+    "Expression",
+    "Effect Control 1",
+    "Effect Control 2",
+    "Undefined",
+    "Undefined",
+    "General Purpose Slider 1",
+    "General Purpose Slider 2",
+    "General Purpose Slider 3",
+    "Knob 2 General Purpose Slider 4",
+    "Knob 3",
+    "Knob 4",
+    "Bank Select",
+    "Modulation Wheel",
+    "Breath controller",
+    "Foot Pedal",
+    "Portamento Time",
+    "Data Entry",
+    "Volume",
+    "Balance",
+    "Pan position",
+    "Expression",
+    "Effect Control 1",
+    "Effect Control 2",
+    "Hold Pedal",
+    "Portamento",
+    "Sustenuto Pedal",
+    "Soft Pedal",
+    "Legato Pedal",
+    "Hold 2 Pedal",
+    "Sound Variation",
+    "Resonance",
+    "Sound Release Time",
+    "Sound Attack Time",
+    "Frequency Cutoff",
+    "Sound Control 6",
+    "Sound Control 7",
+    "Sound Control 8",
+    "Sound Control 9",
+    "Sound Control 10",
+    "Decay",
+    "High Pass Filter Frequency",
+    "General Purpose Button 3",
+    "General Purpose Button 4",
+    "Reverb Level",
+    "Tremolo Level",
+    "Chorus Level",
+    "Detune",
+    "Phaser Level",
+    "Data Button Increment",
+    "Data Button Decrement",
+    "NRPN (LSB)",
+    "NRPN (MSB)",
+    "RPN (LSB)",
+    "RPN (MSB)",
+    "All Sound Off",
+    "All Controllers Off",
+    "Local Keyboard",
+    "All Notes Off",
+    "Omni Mode Off",
+    "Omni Mode On",
+    "Mono Operation",
+    "Poly Operation",
+];
+
+var MIDIControlEvents = {
+    MSB_BANK: 0x00,
+    MSB_MODWHEEL: 0x01,
+    MSB_BREATH: 0x02,
+    MSB_FOOT: 0x04,
+    MSB_PORTAMENTO_TIME: 0x05,
+    MSB_DATA_ENTRY: 0x06,
+    MSB_MAIN_VOLUME: 0x07,
+    MSB_BALANCE: 0x08,
+    MSB_PAN: 0x0a,
+    MSB_EXPRESSION: 0x0b,
+    MSB_EFFECT1: 0x0c,
+    MSB_EFFECT2: 0x0d,
+    MSB_GENERAL_PURPOSE1: 0x10,
+    MSB_GENERAL_PURPOSE2: 0x11,
+    MSB_GENERAL_PURPOSE3: 0x12,
+    MSB_GENERAL_PURPOSE4: 0x13,
+    LSB_BANK: 0x20,
+    LSB_MODWHEEL: 0x21,
+    LSB_BREATH: 0x22,
+    LSB_FOOT: 0x24,
+    LSB_PORTAMENTO_TIME: 0x25,
+    LSB_DATA_ENTRY: 0x26,
+    LSB_MAIN_VOLUME: 0x27,
+    LSB_BALANCE: 0x28,
+    LSB_PAN: 0x2a,
+    LSB_EXPRESSION: 0x2b,
+    LSB_EFFECT1: 0x2c,
+    LSB_EFFECT2: 0x2d,
+    LSB_GENERAL_PURPOSE1: 0x30,
+    LSB_GENERAL_PURPOSE2: 0x31,
+    LSB_GENERAL_PURPOSE3: 0x32,
+    LSB_GENERAL_PURPOSE4: 0x33,
+    SUSTAIN: 0x40,
+    PORTAMENTO: 0x41,
+    SOSTENUTO: 0x42,
+    SUSTENUTO: 0x42,
+    SOFT_PEDAL: 0x43,
+    LEGATO_FOOTSWITCH: 0x44,
+    HOLD2: 0x45,
+    SC1_SOUND_VARIATION: 0x46,
+    SC2_TIMBRE: 0x47,
+    SC3_RELEASE_TIME: 0x48,
+    SC4_ATTACK_TIME: 0x49,
+    SC5_BRIGHTNESS: 0x4a,
+    SC6: 0x4b,
+    SC7: 0x4c,
+    SC8: 0x4d,
+    SC9: 0x4e,
+    SC10: 0x4f,
+    GENERAL_PURPOSE5: 0x50,
+    GENERAL_PURPOSE6: 0x51,
+    GENERAL_PURPOSE7: 0x52,
+    GENERAL_PURPOSE8: 0x53,
+    PORTAMENTO_CONTROL: 0x54,
+    E1_REVERB_DEPTH: 0x5b,
+    E2_TREMOLO_DEPTH: 0x5c,
+    E3_CHORUS_DEPTH: 0x5d,
+    E4_DETUNE_DEPTH: 0x5e,
+    E5_PHASER_DEPTH: 0x5f,
+    DATA_INCREMENT: 0x60,
+    DATA_DECREMENT: 0x61,
+    NONREG_PARM_NUM_LSB: 0x62,
+    NONREG_PARM_NUM_MSB: 0x63,
+    REGIST_PARM_NUM_LSB: 0x64,
+    REGIST_PARM_NUM_MSB: 0x65,
+    ALL_SOUNDS_OFF: 0x78,
+    RESET_CONTROLLERS: 0x79,
+    LOCAL_CONTROL_SWITCH: 0x7a,
+    ALL_NOTES_OFF: 0x7b,
+    OMNI_OFF: 0x7c,
+    OMNI_ON: 0x7d,
+    MONO1: 0x7e,
+    MONO2: 0x7f,
+};
+
+var MIDIMetaEventNames = {
+    0x00: "sequenceNumber",
+    0x01: "text",
+    0x02: "copyrightNotice",
+    0x03: "trackName",
+    0x04: "instrumentName",
+    0x05: "lyrics",
+    0x06: "marker",
+    0x07: "cuePoint",
+    0x20: "midiChannelPrefix",
+    0x21: "portPrefix",
+    0x2f: "endOfTrack",
+    0x51: "setTempo",
+    0x54: "smpteOffset",
+    0x58: "timeSignature",
+    0x59: "keySignature",
+    0x7f: "sequencerSpecific",
+};
+
+var MIDIMetaEvents = {
+    sequenceNumber: 0x00,
+    text: 0x01,
+    copyrightNotice: 0x02,
+    trackName: 0x03,
+    instrumentName: 0x04,
+    lyrics: 0x05,
+    marker: 0x06,
+    cuePoint: 0x07,
+    midiChannelPrefix: 0x20,
+    portPrefix: 0x21,
+    endOfTrack: 0x2f,
+    setTempo: 0x51,
+    smpteOffset: 0x54,
+    timeSignature: 0x58,
+    keySignature: 0x59,
+    sequencerSpecific: 0x7f,
+};
+
+function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
+    var deltaTime = stream.readVarInt();
+    var eventTypeByte = stream.readInt8();
+    if ((eventTypeByte & 0xf0) === 0xf0) {
+        /* system / meta event */
+        if (eventTypeByte === 0xff) {
+            /* meta event */
+            var type = "meta";
+            var subtypeByte = stream.readInt8();
+            var length = stream.readVarInt();
+            switch (subtypeByte) {
+                case MIDIMetaEvents.sequenceNumber:
+                    if (length !== 2)
+                        throw new Error("Expected length for sequenceNumber event is 2, got " + length);
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "sequenceNumber",
+                        number: stream.readInt16(),
+                    };
+                case MIDIMetaEvents.text:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "text",
+                        text: stream.readStr(length),
+                    };
+                case MIDIMetaEvents.copyrightNotice:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "copyrightNotice",
+                        text: stream.readStr(length),
+                    };
+                case MIDIMetaEvents.trackName:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "trackName",
+                        text: stream.readStr(length),
+                    };
+                case MIDIMetaEvents.instrumentName:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "instrumentName",
+                        text: stream.readStr(length),
+                    };
+                case MIDIMetaEvents.lyrics:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "lyrics",
+                        text: stream.readStr(length),
+                    };
+                case MIDIMetaEvents.marker:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "marker",
+                        text: stream.readStr(length),
+                    };
+                case MIDIMetaEvents.cuePoint:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "cuePoint",
+                        text: stream.readStr(length),
+                    };
+                case MIDIMetaEvents.midiChannelPrefix:
+                    if (length !== 1)
+                        throw new Error("Expected length for midiChannelPrefix event is 1, got " + length);
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "midiChannelPrefix",
+                        value: stream.readInt8(),
+                    };
+                case MIDIMetaEvents.portPrefix:
+                    if (length !== 1)
+                        throw new Error("Expected length for midiChannelPrefix event is 1, got " + length);
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "portPrefix",
+                        port: stream.readInt8(),
+                    };
+                case MIDIMetaEvents.endOfTrack:
+                    if (length !== 0)
+                        throw new Error("Expected length for endOfTrack event is 0, got " + length);
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "endOfTrack",
+                    };
+                case MIDIMetaEvents.setTempo:
+                    if (length !== 3)
+                        throw new Error("Expected length for setTempo event is 3, got " + length);
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "setTempo",
+                        microsecondsPerBeat: (stream.readInt8() << 16) +
+                            (stream.readInt8() << 8) +
+                            stream.readInt8(),
+                    };
+                case MIDIMetaEvents.smpteOffset: {
+                    if (length !== 5)
+                        throw new Error("Expected length for smpteOffset event is 5, got " + length);
+                    var hourByte = stream.readInt8();
+                    var table = {
+                        0x00: 24,
+                        0x20: 25,
+                        0x40: 29,
+                        0x60: 30,
+                    };
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "smpteOffset",
+                        frameRate: table[hourByte & 0x60],
+                        hour: hourByte & 0x1f,
+                        min: stream.readInt8(),
+                        sec: stream.readInt8(),
+                        frame: stream.readInt8(),
+                        subframe: stream.readInt8(),
+                    };
+                }
+                case MIDIMetaEvents.timeSignature:
+                    if (length !== 4)
+                        throw new Error("Expected length for timeSignature event is 4, got " + length);
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "timeSignature",
+                        numerator: stream.readInt8(),
+                        denominator: Math.pow(2, stream.readInt8()),
+                        metronome: stream.readInt8(),
+                        thirtyseconds: stream.readInt8(),
+                    };
+                case MIDIMetaEvents.keySignature:
+                    if (length !== 2)
+                        throw new Error("Expected length for keySignature event is 2, got " + length);
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "keySignature",
+                        key: stream.readInt8(true),
+                        scale: stream.readInt8(),
+                    };
+                case MIDIMetaEvents.sequencerSpecific:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "sequencerSpecific",
+                        data: stream.read(length),
+                    };
+                default:
+                    return {
+                        deltaTime: deltaTime,
+                        type: type,
+                        subtype: "unknown",
+                        data: stream.read(length),
+                    };
+            }
+        }
+        else if (eventTypeByte === 0xf0) {
+            var length = stream.readVarInt();
+            return {
+                deltaTime: deltaTime,
+                type: "sysEx",
+                data: stream.read(length),
+            };
+        }
+        else if (eventTypeByte === 0xf7) {
+            var length = stream.readVarInt();
+            return {
+                deltaTime: deltaTime,
+                type: "dividedSysEx",
+                data: stream.read(length),
+            };
+        }
+        else {
+            throw new Error("Unrecognised MIDI event type byte: " + eventTypeByte);
+        }
+    }
+    else {
+        /* channel event */
+        var param1 = void 0;
+        if ((eventTypeByte & 0x80) === 0) {
+            /* running status - reuse lastEventTypeByte as the event type.
+              eventTypeByte is actually the first parameter
+            */
+            param1 = eventTypeByte;
+            eventTypeByte = lastEventTypeByte;
+        }
+        else {
+            param1 = stream.readInt8();
+            setLastEventTypeByte(eventTypeByte);
+        }
+        var eventType = eventTypeByte >> 4;
+        var channel = eventTypeByte & 0x0f;
+        var type = "channel";
+        switch (eventType) {
+            case MIDIChannelEvents.noteOff:
+                return {
+                    deltaTime: deltaTime,
+                    type: type,
+                    channel: channel,
+                    subtype: "noteOff",
+                    noteNumber: param1,
+                    velocity: stream.readInt8(),
+                };
+            case MIDIChannelEvents.noteOn: {
+                var velocity = stream.readInt8();
+                return {
+                    deltaTime: deltaTime,
+                    type: type,
+                    channel: channel,
+                    subtype: velocity === 0 ? "noteOff" : "noteOn",
+                    noteNumber: param1,
+                    velocity: velocity,
+                };
+            }
+            case MIDIChannelEvents.noteAftertouch:
+                return {
+                    deltaTime: deltaTime,
+                    type: type,
+                    channel: channel,
+                    subtype: "noteAftertouch",
+                    noteNumber: param1,
+                    amount: stream.readInt8(),
+                };
+            case MIDIChannelEvents.controller:
+                return {
+                    deltaTime: deltaTime,
+                    type: type,
+                    channel: channel,
+                    subtype: "controller",
+                    controllerType: param1,
+                    value: stream.readInt8(),
+                };
+            case MIDIChannelEvents.programChange:
+                return {
+                    deltaTime: deltaTime,
+                    type: type,
+                    channel: channel,
+                    subtype: "programChange",
+                    value: param1,
+                };
+            case MIDIChannelEvents.channelAftertouch:
+                return {
+                    deltaTime: deltaTime,
+                    type: type,
+                    channel: channel,
+                    subtype: "channelAftertouch",
+                    amount: param1,
+                };
+            case MIDIChannelEvents.pitchBend:
+                return {
+                    deltaTime: deltaTime,
+                    type: type,
+                    channel: channel,
+                    subtype: "pitchBend",
+                    value: param1 + (stream.readInt8() << 7),
+                };
+            default:
+                return {
+                    deltaTime: deltaTime,
+                    type: type,
+                    channel: channel,
+                    subtype: "unknown",
+                    data: stream.readInt8(),
+                };
+        }
+    }
+}
+
 /* Wrapper for accessing strings through sequential reads */
 var Stream = /** @class */ (function () {
     function Stream(buf) {
@@ -83,284 +559,6 @@ var Stream = /** @class */ (function () {
     return Stream;
 }());
 
-function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
-    var deltaTime = stream.readVarInt();
-    var eventTypeByte = stream.readInt8();
-    if ((eventTypeByte & 0xf0) === 0xf0) {
-        /* system / meta event */
-        if (eventTypeByte === 0xff) {
-            /* meta event */
-            var type = "meta";
-            var subtypeByte = stream.readInt8();
-            var length = stream.readVarInt();
-            switch (subtypeByte) {
-                case 0x00:
-                    if (length !== 2)
-                        throw new Error("Expected length for sequenceNumber event is 2, got " + length);
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "sequenceNumber",
-                        number: stream.readInt16(),
-                    };
-                case 0x01:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "text",
-                        text: stream.readStr(length),
-                    };
-                case 0x02:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "copyrightNotice",
-                        text: stream.readStr(length),
-                    };
-                case 0x03:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "trackName",
-                        text: stream.readStr(length),
-                    };
-                case 0x04:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "instrumentName",
-                        text: stream.readStr(length),
-                    };
-                case 0x05:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "lyrics",
-                        text: stream.readStr(length),
-                    };
-                case 0x06:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "marker",
-                        text: stream.readStr(length),
-                    };
-                case 0x07:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "cuePoint",
-                        text: stream.readStr(length),
-                    };
-                case 0x20:
-                    if (length !== 1)
-                        throw new Error("Expected length for midiChannelPrefix event is 1, got " + length);
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "midiChannelPrefix",
-                        value: stream.readInt8(),
-                    };
-                case 0x21:
-                    if (length !== 1)
-                        throw new Error("Expected length for midiChannelPrefix event is 1, got " + length);
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "portPrefix",
-                        port: stream.readInt8(),
-                    };
-                case 0x2f:
-                    if (length !== 0)
-                        throw new Error("Expected length for endOfTrack event is 0, got " + length);
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "endOfTrack",
-                    };
-                case 0x51:
-                    if (length !== 3)
-                        throw new Error("Expected length for setTempo event is 3, got " + length);
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "setTempo",
-                        microsecondsPerBeat: (stream.readInt8() << 16) +
-                            (stream.readInt8() << 8) +
-                            stream.readInt8(),
-                    };
-                case 0x54: {
-                    if (length !== 5)
-                        throw new Error("Expected length for smpteOffset event is 5, got " + length);
-                    var hourByte = stream.readInt8();
-                    var table = {
-                        0x00: 24,
-                        0x20: 25,
-                        0x40: 29,
-                        0x60: 30,
-                    };
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "smpteOffset",
-                        frameRate: table[hourByte & 0x60],
-                        hour: hourByte & 0x1f,
-                        min: stream.readInt8(),
-                        sec: stream.readInt8(),
-                        frame: stream.readInt8(),
-                        subframe: stream.readInt8(),
-                    };
-                }
-                case 0x58:
-                    if (length !== 4)
-                        throw new Error("Expected length for timeSignature event is 4, got " + length);
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "timeSignature",
-                        numerator: stream.readInt8(),
-                        denominator: Math.pow(2, stream.readInt8()),
-                        metronome: stream.readInt8(),
-                        thirtyseconds: stream.readInt8(),
-                    };
-                case 0x59:
-                    if (length !== 2)
-                        throw new Error("Expected length for keySignature event is 2, got " + length);
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "keySignature",
-                        key: stream.readInt8(true),
-                        scale: stream.readInt8(),
-                    };
-                case 0x7f:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "sequencerSpecific",
-                        data: stream.read(length),
-                    };
-                default:
-                    return {
-                        deltaTime: deltaTime,
-                        type: type,
-                        subtype: "unknown",
-                        data: stream.read(length),
-                    };
-            }
-        }
-        else if (eventTypeByte === 0xf0) {
-            var length = stream.readVarInt();
-            return {
-                deltaTime: deltaTime,
-                type: "sysEx",
-                data: stream.read(length),
-            };
-        }
-        else if (eventTypeByte === 0xf7) {
-            var length = stream.readVarInt();
-            return {
-                deltaTime: deltaTime,
-                type: "dividedSysEx",
-                data: stream.read(length),
-            };
-        }
-        else {
-            throw new Error("Unrecognised MIDI event type byte: " + eventTypeByte);
-        }
-    }
-    else {
-        /* channel event */
-        var param1 = void 0;
-        if ((eventTypeByte & 0x80) === 0) {
-            /* running status - reuse lastEventTypeByte as the event type.
-              eventTypeByte is actually the first parameter
-            */
-            param1 = eventTypeByte;
-            eventTypeByte = lastEventTypeByte;
-        }
-        else {
-            param1 = stream.readInt8();
-            setLastEventTypeByte(eventTypeByte);
-        }
-        var eventType = eventTypeByte >> 4;
-        var channel = eventTypeByte & 0x0f;
-        var type = "channel";
-        switch (eventType) {
-            case 0x08:
-                return {
-                    deltaTime: deltaTime,
-                    type: type,
-                    channel: channel,
-                    subtype: "noteOff",
-                    noteNumber: param1,
-                    velocity: stream.readInt8(),
-                };
-            case 0x09: {
-                var velocity = stream.readInt8();
-                return {
-                    deltaTime: deltaTime,
-                    type: type,
-                    channel: channel,
-                    subtype: velocity === 0 ? "noteOff" : "noteOn",
-                    noteNumber: param1,
-                    velocity: velocity,
-                };
-            }
-            case 0x0a:
-                return {
-                    deltaTime: deltaTime,
-                    type: type,
-                    channel: channel,
-                    subtype: "noteAftertouch",
-                    noteNumber: param1,
-                    amount: stream.readInt8(),
-                };
-            case 0x0b:
-                return {
-                    deltaTime: deltaTime,
-                    type: type,
-                    channel: channel,
-                    subtype: "controller",
-                    controllerType: param1,
-                    value: stream.readInt8(),
-                };
-            case 0x0c:
-                return {
-                    deltaTime: deltaTime,
-                    type: type,
-                    channel: channel,
-                    subtype: "programChange",
-                    value: param1,
-                };
-            case 0x0d:
-                return {
-                    deltaTime: deltaTime,
-                    type: type,
-                    channel: channel,
-                    subtype: "channelAftertouch",
-                    amount: param1,
-                };
-            case 0x0e:
-                return {
-                    deltaTime: deltaTime,
-                    type: type,
-                    channel: channel,
-                    subtype: "pitchBend",
-                    value: param1 + (stream.readInt8() << 7),
-                };
-            default:
-                return {
-                    deltaTime: deltaTime,
-                    type: type,
-                    channel: channel,
-                    subtype: "unknown",
-                    data: stream.readInt8(),
-                };
-        }
-    }
-}
-
 /*
 class to parse the .mid file format
 (depends on stream.js)
@@ -372,7 +570,7 @@ function read(data) {
         return {
             id: id,
             length: length,
-            data: stream.read(length)
+            data: stream.read(length),
         };
     }
     var stream = new Stream(data);
@@ -394,7 +592,7 @@ function read(data) {
     var header = {
         formatType: formatType,
         trackCount: trackCount,
-        ticksPerBeat: ticksPerBeat
+        ticksPerBeat: ticksPerBeat,
     };
     var lastEventTypeByte;
     function readEvent(stream) {
@@ -415,7 +613,7 @@ function read(data) {
     }
     return {
         header: header,
-        tracks: tracks
+        tracks: tracks,
     };
 }
 
@@ -426,81 +624,6 @@ function toCharCodes(str) {
     }
     return bytes;
 }
-
-var Buffer = /** @class */ (function () {
-    function Buffer() {
-        this.data = [];
-        this.position = 0;
-    }
-    Object.defineProperty(Buffer.prototype, "length", {
-        get: function () {
-            return this.data.length;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Buffer.prototype.writeByte = function (v) {
-        this.data.push(v);
-        this.position++;
-    };
-    Buffer.prototype.writeStr = function (str) {
-        this.writeBytes(toCharCodes(str));
-    };
-    Buffer.prototype.writeInt32 = function (v) {
-        this.writeByte((v >> 24) & 0xff);
-        this.writeByte((v >> 16) & 0xff);
-        this.writeByte((v >> 8) & 0xff);
-        this.writeByte(v & 0xff);
-    };
-    Buffer.prototype.writeInt16 = function (v) {
-        this.writeByte((v >> 8) & 0xff);
-        this.writeByte(v & 0xff);
-    };
-    Buffer.prototype.writeBytes = function (arr) {
-        var _this = this;
-        arr.forEach(function (v) { return _this.writeByte(v); });
-    };
-    Buffer.prototype.writeChunk = function (id, func) {
-        this.writeStr(id);
-        var chunkBuf = new Buffer();
-        func(chunkBuf);
-        this.writeInt32(chunkBuf.length);
-        this.writeBytes(chunkBuf.data);
-    };
-    Buffer.prototype.toBytes = function () {
-        return new Uint8Array(this.data);
-    };
-    return Buffer;
-}());
-
-var MIDIChannelEvents = {
-    noteOff: 0x08,
-    noteOn: 0x09,
-    noteAftertouch: 0x0a,
-    controller: 0x0b,
-    programChange: 0x0c,
-    channelAftertouch: 0x0d,
-    pitchBend: 0x0e
-};
-
-var MIDIMetaEvents = {
-    sequenceNumber: 0x00,
-    text: 0x01,
-    copyrightNotice: 0x02,
-    trackName: 0x03,
-    instrumentName: 0x04,
-    lyrics: 0x05,
-    marker: 0x06,
-    cuePoint: 0x07,
-    midiChannelPrefix: 0x20,
-    portPrefix: 0x21,
-    endOfTrack: 0x2f,
-    setTempo: 0x51,
-    smpteOffset: 0x54,
-    timeSignature: 0x58,
-    keySignature: 0x59,
-    sequencerSpecific: 0x7f
-};
 
 // variable-length quantity
 function toVLQ(intNum) {
@@ -670,6 +793,52 @@ function serialize(e, includeDeltaTime) {
     return bytes;
 }
 
+var Buffer = /** @class */ (function () {
+    function Buffer() {
+        this.data = [];
+        this.position = 0;
+    }
+    Object.defineProperty(Buffer.prototype, "length", {
+        get: function () {
+            return this.data.length;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Buffer.prototype.writeByte = function (v) {
+        this.data.push(v);
+        this.position++;
+    };
+    Buffer.prototype.writeStr = function (str) {
+        this.writeBytes(toCharCodes(str));
+    };
+    Buffer.prototype.writeInt32 = function (v) {
+        this.writeByte((v >> 24) & 0xff);
+        this.writeByte((v >> 16) & 0xff);
+        this.writeByte((v >> 8) & 0xff);
+        this.writeByte(v & 0xff);
+    };
+    Buffer.prototype.writeInt16 = function (v) {
+        this.writeByte((v >> 8) & 0xff);
+        this.writeByte(v & 0xff);
+    };
+    Buffer.prototype.writeBytes = function (arr) {
+        var _this = this;
+        arr.forEach(function (v) { return _this.writeByte(v); });
+    };
+    Buffer.prototype.writeChunk = function (id, func) {
+        this.writeStr(id);
+        var chunkBuf = new Buffer();
+        func(chunkBuf);
+        this.writeInt32(chunkBuf.length);
+        this.writeBytes(chunkBuf.data);
+    };
+    Buffer.prototype.toBytes = function () {
+        return new Uint8Array(this.data);
+    };
+    return Buffer;
+}());
+
 //https://sites.google.com/site/yyagisite/material/smfspec#format
 function write(tracks, ticksPerBeat) {
     if (ticksPerBeat === void 0) { ticksPerBeat = 480; }
@@ -695,175 +864,6 @@ function write(tracks, ticksPerBeat) {
     }
     return buf.toBytes();
 }
-
-var MIDIControlEventNames = [
-    "Bank Select",
-    "Modulation",
-    "Breath Controller",
-    "Foot Pedal",
-    "Portamento Time",
-    "Data Entry",
-    "Volume",
-    "Balance",
-    "Pan",
-    "Expression",
-    "Effect Control 1",
-    "Effect Control 2",
-    "Undefined",
-    "Undefined",
-    "General Purpose Slider 1",
-    "General Purpose Slider 2",
-    "General Purpose Slider 3",
-    "Knob 2 General Purpose Slider 4",
-    "Knob 3",
-    "Knob 4",
-    "Bank Select",
-    "Modulation Wheel",
-    "Breath controller",
-    "Foot Pedal",
-    "Portamento Time",
-    "Data Entry",
-    "Volume",
-    "Balance",
-    "Pan position",
-    "Expression",
-    "Effect Control 1",
-    "Effect Control 2",
-    "Hold Pedal",
-    "Portamento",
-    "Sustenuto Pedal",
-    "Soft Pedal",
-    "Legato Pedal",
-    "Hold 2 Pedal",
-    "Sound Variation",
-    "Resonance",
-    "Sound Release Time",
-    "Sound Attack Time",
-    "Frequency Cutoff",
-    "Sound Control 6",
-    "Sound Control 7",
-    "Sound Control 8",
-    "Sound Control 9",
-    "Sound Control 10",
-    "Decay",
-    "High Pass Filter Frequency",
-    "General Purpose Button 3",
-    "General Purpose Button 4",
-    "Reverb Level",
-    "Tremolo Level",
-    "Chorus Level",
-    "Detune",
-    "Phaser Level",
-    "Data Button Increment",
-    "Data Button Decrement",
-    "NRPN (LSB)",
-    "NRPN (MSB)",
-    "RPN (LSB)",
-    "RPN (MSB)",
-    "All Sound Off",
-    "All Controllers Off",
-    "Local Keyboard",
-    "All Notes Off",
-    "Omni Mode Off",
-    "Omni Mode On",
-    "Mono Operation",
-    "Poly Operation"
-];
-
-var MIDIControlEvents = {
-    MSB_BANK: 0x00,
-    MSB_MODWHEEL: 0x01,
-    MSB_BREATH: 0x02,
-    MSB_FOOT: 0x04,
-    MSB_PORTAMENTO_TIME: 0x05,
-    MSB_DATA_ENTRY: 0x06,
-    MSB_MAIN_VOLUME: 0x07,
-    MSB_BALANCE: 0x08,
-    MSB_PAN: 0x0a,
-    MSB_EXPRESSION: 0x0b,
-    MSB_EFFECT1: 0x0c,
-    MSB_EFFECT2: 0x0d,
-    MSB_GENERAL_PURPOSE1: 0x10,
-    MSB_GENERAL_PURPOSE2: 0x11,
-    MSB_GENERAL_PURPOSE3: 0x12,
-    MSB_GENERAL_PURPOSE4: 0x13,
-    LSB_BANK: 0x20,
-    LSB_MODWHEEL: 0x21,
-    LSB_BREATH: 0x22,
-    LSB_FOOT: 0x24,
-    LSB_PORTAMENTO_TIME: 0x25,
-    LSB_DATA_ENTRY: 0x26,
-    LSB_MAIN_VOLUME: 0x27,
-    LSB_BALANCE: 0x28,
-    LSB_PAN: 0x2a,
-    LSB_EXPRESSION: 0x2b,
-    LSB_EFFECT1: 0x2c,
-    LSB_EFFECT2: 0x2d,
-    LSB_GENERAL_PURPOSE1: 0x30,
-    LSB_GENERAL_PURPOSE2: 0x31,
-    LSB_GENERAL_PURPOSE3: 0x32,
-    LSB_GENERAL_PURPOSE4: 0x33,
-    SUSTAIN: 0x40,
-    PORTAMENTO: 0x41,
-    SOSTENUTO: 0x42,
-    SUSTENUTO: 0x42,
-    SOFT_PEDAL: 0x43,
-    LEGATO_FOOTSWITCH: 0x44,
-    HOLD2: 0x45,
-    SC1_SOUND_VARIATION: 0x46,
-    SC2_TIMBRE: 0x47,
-    SC3_RELEASE_TIME: 0x48,
-    SC4_ATTACK_TIME: 0x49,
-    SC5_BRIGHTNESS: 0x4a,
-    SC6: 0x4b,
-    SC7: 0x4c,
-    SC8: 0x4d,
-    SC9: 0x4e,
-    SC10: 0x4f,
-    GENERAL_PURPOSE5: 0x50,
-    GENERAL_PURPOSE6: 0x51,
-    GENERAL_PURPOSE7: 0x52,
-    GENERAL_PURPOSE8: 0x53,
-    PORTAMENTO_CONTROL: 0x54,
-    E1_REVERB_DEPTH: 0x5b,
-    E2_TREMOLO_DEPTH: 0x5c,
-    E3_CHORUS_DEPTH: 0x5d,
-    E4_DETUNE_DEPTH: 0x5e,
-    E5_PHASER_DEPTH: 0x5f,
-    DATA_INCREMENT: 0x60,
-    DATA_DECREMENT: 0x61,
-    NONREG_PARM_NUM_LSB: 0x62,
-    NONREG_PARM_NUM_MSB: 0x63,
-    REGIST_PARM_NUM_LSB: 0x64,
-    REGIST_PARM_NUM_MSB: 0x65,
-    ALL_SOUNDS_OFF: 0x78,
-    RESET_CONTROLLERS: 0x79,
-    LOCAL_CONTROL_SWITCH: 0x7a,
-    ALL_NOTES_OFF: 0x7b,
-    OMNI_OFF: 0x7c,
-    OMNI_ON: 0x7d,
-    MONO1: 0x7e,
-    MONO2: 0x7f
-};
-
-var MIDIMetaEventNames = {
-    0x00: "sequenceNumber",
-    0x01: "text",
-    0x02: "copyrightNotice",
-    0x03: "trackName",
-    0x04: "instrumentName",
-    0x05: "lyrics",
-    0x06: "marker",
-    0x07: "cuePoint",
-    0x20: "midiChannelPrefix",
-    0x21: "portPrefix",
-    0x2f: "endOfTrack",
-    0x51: "setTempo",
-    0x54: "smpteOffset",
-    0x58: "timeSignature",
-    0x59: "keySignature",
-    0x7f: "sequencerSpecific"
-};
 
 exports.MIDIChannelEvents = MIDIChannelEvents;
 exports.MIDIControlEventNames = MIDIControlEventNames;

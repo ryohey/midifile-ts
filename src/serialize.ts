@@ -4,10 +4,6 @@ import { AnyEvent } from "./event"
 import { toCharCodes } from "./toCharCodes"
 import { toVLQ } from "./vlq"
 
-function assertUnreachable(x: never): never {
-  throw new Error("Didn't expect to get here")
-}
-
 export function serialize(e: AnyEvent, includeDeltaTime = true) {
   const bytes: number[] = []
 

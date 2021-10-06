@@ -69,5 +69,5 @@ export const MIDIControlEventNames = [
   "Omni Mode Off",
   "Omni Mode On",
   "Mono Operation",
-  "Poly Operation"
-]
+  "Poly Operation",
+] as const

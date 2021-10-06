@@ -1,4 +1,4 @@
-export const MIDIMetaEventNames: { [key: number]: string } = {
+export const MIDIMetaEventNames = {
   0x00: "sequenceNumber",
   0x01: "text",
   0x02: "copyrightNotice",
@@ -14,5 +14,5 @@ export const MIDIMetaEventNames: { [key: number]: string } = {
   0x54: "smpteOffset",
   0x58: "timeSignature",
   0x59: "keySignature",
-  0x7f: "sequencerSpecific"
-}
+  0x7f: "sequencerSpecific",
+} as const

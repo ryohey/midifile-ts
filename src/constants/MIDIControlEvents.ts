@@ -1,4 +1,4 @@
-export const MIDIControlEvents: { [key: string]: number } = {
+export const MIDIControlEvents = {
   MSB_BANK: 0x00,
   MSB_MODWHEEL: 0x01,
   MSB_BREATH: 0x02,
@@ -71,5 +71,5 @@ export const MIDIControlEvents: { [key: string]: number } = {
   OMNI_OFF: 0x7c,
   OMNI_ON: 0x7d,
   MONO1: 0x7e,
-  MONO2: 0x7f
-}
+  MONO2: 0x7f,
+} as const
