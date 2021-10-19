@@ -325,7 +325,7 @@ declare class Stream {
     */
     readVarInt(): number;
 }
-declare function deserialize(stream: Stream, lastEventTypeByte: number, setLastEventTypeByte: (eventType: number) => void): AnyEvent;
+declare function deserialize(stream: Stream, lastEventTypeByte?: number, setLastEventTypeByte?: (eventType: number) => void): AnyEvent;
 interface MidiHeader {
     formatType: number;
     trackCount: number;

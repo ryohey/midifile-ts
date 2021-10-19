@@ -34,10 +34,24 @@ import { Stream } from "./stream"
 
 export function deserialize(
   stream: Stream,
-  lastEventTypeByte: number,
-  setLastEventTypeByte: (eventType: number) => void
+  lastEventTypeByte: number = 0,
+  setLastEventTypeByte?: (eventType: number) => void
 ): AnyEvent {
   const deltaTime = stream.readVarInt()
+  return deserializeSingleEvent(
+    stream,
+    deltaTime,
+    lastEventTypeByte,
+    setLastEventTypeByte
+  )
+}
+
+export function deserializeSingleEvent(
+  stream: Stream,
+  deltaTime: number = 0,
+  lastEventTypeByte: number = 0,
+  setLastEventTypeByte?: (eventType: number) => void
+) {
   let eventTypeByte = stream.readInt8()
   if ((eventTypeByte & 0xf0) === 0xf0) {
     /* system / meta event */
@@ -246,7 +260,7 @@ export function deserialize(
       eventTypeByte = lastEventTypeByte
     } else {
       param1 = stream.readInt8()
-      setLastEventTypeByte(eventTypeByte)
+      setLastEventTypeByte?.(eventTypeByte)
     }
     const eventType = eventTypeByte >> 4
     const channel = eventTypeByte & 0x0f
