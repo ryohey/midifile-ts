@@ -878,6 +878,7 @@ exports.MIDIMetaEventNames = MIDIMetaEventNames;
 exports.MIDIMetaEvents = MIDIMetaEvents;
 exports.Stream = Stream;
 exports.deserialize = deserialize;
+exports.deserializeSingleEvent = deserializeSingleEvent;
 exports.read = read;
 exports.serialize = serialize;
 exports.write = write;
