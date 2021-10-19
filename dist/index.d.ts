@@ -299,7 +299,10 @@ interface SysExEvent extends Event<"sysEx"> {
 interface DividedSysExEvent extends Event<"dividedSysEx"> {
     data: number[];
 }
-type AnyEvent = SequenceNumberEvent | TextEvent | CopyrightNoticeEvent | TrackNameEvent | InstrumentNameEvent | LyricsEvent | MarkerEvent | CuePointEvent | ChannelPrefixEvent | PortPrefixEvent | EndOfTrackEvent | SetTempoEvent | SmpteOffsetEvent | TimeSignatureEvent | KeySignatureEvent | SequencerSpecificEvent | UnknownMetaEvent | NoteOffEvent | NoteOnEvent | NoteAftertouchEvent | ProgramChangeEvent | ChannelAftertouchEvent | PitchBendEvent | UnknownChannelEvent | ControllerEvent | SysExEvent | DividedSysExEvent;
+type AnyMetaEvent = SequenceNumberEvent | TextEvent | CopyrightNoticeEvent | TrackNameEvent | InstrumentNameEvent | LyricsEvent | MarkerEvent | CuePointEvent | ChannelPrefixEvent | PortPrefixEvent | EndOfTrackEvent | SetTempoEvent | SmpteOffsetEvent | TimeSignatureEvent | KeySignatureEvent | SequencerSpecificEvent | UnknownMetaEvent;
+type AnyChannelEvent = NoteOffEvent | NoteOnEvent | NoteAftertouchEvent | ProgramChangeEvent | ChannelAftertouchEvent | PitchBendEvent | UnknownChannelEvent | ControllerEvent;
+type AnySysExEvent = SysExEvent | DividedSysExEvent;
+type AnyEvent = AnyMetaEvent | AnySysExEvent | AnyChannelEvent;
 type StreamSource = DataView | number[] | ArrayBuffer | Uint8Array;
 /* Wrapper for accessing strings through sequential reads */
 declare class Stream {
@@ -340,4 +343,4 @@ declare function read(data: StreamSource): MidiFile;
 declare function serialize(e: AnyEvent, includeDeltaTime?: boolean): number[];
 //https://sites.google.com/site/yyagisite/material/smfspec#format
 declare function write(tracks: AnyEvent[][], ticksPerBeat?: number): Uint8Array;
-export { MIDIChannelEvents, MIDIControlEventNames, MIDIControlEvents, MIDIMetaEventNames, MIDIMetaEvents, deserialize, Event, MetaEvent, SequenceNumberEvent, TextEvent, CopyrightNoticeEvent, TrackNameEvent, InstrumentNameEvent, LyricsEvent, MarkerEvent, CuePointEvent, ChannelPrefixEvent, PortPrefixEvent, EndOfTrackEvent, SetTempoEvent, SmpteOffsetEvent, TimeSignatureEvent, KeySignatureEvent, SequencerSpecificEvent, UnknownMetaEvent, ChannelEvent, NoteOffEvent, NoteOnEvent, NoteAftertouchEvent, ProgramChangeEvent, ChannelAftertouchEvent, PitchBendEvent, UnknownChannelEvent, ControllerEvent, SysExEvent, DividedSysExEvent, AnyEvent, MidiFile, MidiHeader, read, serialize, Stream, StreamSource, write };
+export { MIDIChannelEvents, MIDIControlEventNames, MIDIControlEvents, MIDIMetaEventNames, MIDIMetaEvents, deserialize, Event, MetaEvent, SequenceNumberEvent, TextEvent, CopyrightNoticeEvent, TrackNameEvent, InstrumentNameEvent, LyricsEvent, MarkerEvent, CuePointEvent, ChannelPrefixEvent, PortPrefixEvent, EndOfTrackEvent, SetTempoEvent, SmpteOffsetEvent, TimeSignatureEvent, KeySignatureEvent, SequencerSpecificEvent, UnknownMetaEvent, ChannelEvent, NoteOffEvent, NoteOnEvent, NoteAftertouchEvent, ProgramChangeEvent, ChannelAftertouchEvent, PitchBendEvent, UnknownChannelEvent, ControllerEvent, SysExEvent, DividedSysExEvent, AnyMetaEvent, AnyChannelEvent, AnySysExEvent, AnyEvent, MidiFile, MidiHeader, read, serialize, Stream, StreamSource, write };
