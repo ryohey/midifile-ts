@@ -201,7 +201,13 @@ var MIDIMetaEvents = {
 };
 
 function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
+    if (lastEventTypeByte === void 0) { lastEventTypeByte = 0; }
     var deltaTime = stream.readVarInt();
+    return deserializeSingleEvent(stream, deltaTime, lastEventTypeByte, setLastEventTypeByte);
+}
+function deserializeSingleEvent(stream, deltaTime, lastEventTypeByte, setLastEventTypeByte) {
+    if (deltaTime === void 0) { deltaTime = 0; }
+    if (lastEventTypeByte === void 0) { lastEventTypeByte = 0; }
     var eventTypeByte = stream.readInt8();
     if ((eventTypeByte & 0xf0) === 0xf0) {
         /* system / meta event */
@@ -398,7 +404,7 @@ function deserialize(stream, lastEventTypeByte, setLastEventTypeByte) {
         }
         else {
             param1 = stream.readInt8();
-            setLastEventTypeByte(eventTypeByte);
+            setLastEventTypeByte === null || setLastEventTypeByte === void 0 ? void 0 : setLastEventTypeByte(eventTypeByte);
         }
         var eventType = eventTypeByte >> 4;
         var channel = eventTypeByte & 0x0f;
