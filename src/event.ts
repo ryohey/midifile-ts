@@ -140,6 +140,16 @@ export interface DividedSysExEvent extends Event<"dividedSysEx"> {
   data: number[]
 }
 
+export type AnyChannelEvent =
+  | NoteOffEvent
+  | NoteOnEvent
+  | NoteAftertouchEvent
+  | ProgramChangeEvent
+  | ChannelAftertouchEvent
+  | PitchBendEvent
+  | UnknownChannelEvent
+  | ControllerEvent
+
 export type AnyEvent =
   | SequenceNumberEvent
   | TextEvent
@@ -158,13 +168,6 @@ export type AnyEvent =
   | KeySignatureEvent
   | SequencerSpecificEvent
   | UnknownMetaEvent
-  | NoteOffEvent
-  | NoteOnEvent
-  | NoteAftertouchEvent
-  | ProgramChangeEvent
-  | ChannelAftertouchEvent
-  | PitchBendEvent
-  | UnknownChannelEvent
-  | ControllerEvent
   | SysExEvent
   | DividedSysExEvent
+  | AnyChannelEvent
