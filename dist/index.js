@@ -1,7 +1,3 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
 var MIDIChannelEvents = {
     noteOff: 0x08,
     noteOn: 0x09,
@@ -871,14 +867,5 @@ function write(tracks, ticksPerBeat) {
     return buf.toBytes();
 }
 
-exports.MIDIChannelEvents = MIDIChannelEvents;
-exports.MIDIControlEventNames = MIDIControlEventNames;
-exports.MIDIControlEvents = MIDIControlEvents;
-exports.MIDIMetaEventNames = MIDIMetaEventNames;
-exports.MIDIMetaEvents = MIDIMetaEvents;
-exports.Stream = Stream;
-exports.deserialize = deserialize;
-exports.deserializeSingleEvent = deserializeSingleEvent;
-exports.read = read;
-exports.serialize = serialize;
-exports.write = write;
+export { MIDIChannelEvents, MIDIControlEventNames, MIDIControlEvents, MIDIMetaEventNames, MIDIMetaEvents, Stream, deserialize, deserializeSingleEvent, read, serialize, write };
+//# sourceMappingURL=index.js.map

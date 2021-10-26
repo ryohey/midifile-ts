@@ -2,7 +2,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "target": "es5",
-    "module": "es2015",
+    "module": "ESNext",
     "esModuleInterop": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
