@@ -714,7 +714,19 @@ function serialize(e, includeDeltaTime) {
                     break;
                 }
                 case "smpteOffset": {
-                    console.warn("not implemented yet");
+                    var frameRateByte = {
+                        24: 0x00,
+                        25: 0x20,
+                        29: 0x40,
+                        30: 0x60,
+                    };
+                    addNumbers([
+                        frameRateByte[e.frameRate] + (0x1f & e.hour),
+                        e.min,
+                        e.sec,
+                        e.frame,
+                        e.subframe,
+                    ]);
                     break;
                 }
                 case "timeSignature": {
