@@ -650,7 +650,7 @@ function serialize(e, includeDeltaTime) {
         }
         else {
             if (!Number.isInteger(data)) {
-                throw new Error("\"" + data + "\" is not integer");
+                throw new Error("\"".concat(data, "\" is not integer"));
             }
             bytes.push(data);
         }
