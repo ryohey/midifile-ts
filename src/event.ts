@@ -49,7 +49,7 @@ export interface PortPrefixEvent extends MetaEvent<"portPrefix"> {
   port: number
 }
 
-export interface EndOfTrackEvent extends MetaEvent<"endOfTrack"> { }
+export interface EndOfTrackEvent extends MetaEvent<"endOfTrack"> {}
 
 export interface SetTempoEvent extends MetaEvent<"setTempo"> {
   microsecondsPerBeat: number
@@ -139,64 +139,47 @@ export interface SysExEvent extends Event<"sysEx"> {
 export interface DividedSysExEvent extends Event<"dividedSysEx"> {
   data: number[]
 }
-// System Common Events
-export interface TimeCodeQuarterFrameEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "timeCodeQuarterFrame";
-  data: number;
+
+/* System Common Events */
+
+export interface SystemEvent<T extends string> extends Event<"system"> {
+  subtype: T
 }
 
-export interface SongPositionPointerEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "songPositionPointer";
-  value: number; // 14-bit value
+export interface TimeCodeQuarterFrameEvent
+  extends SystemEvent<"timeCodeQuarterFrame"> {
+  data: number
 }
 
-export interface SongSelectEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "songSelect";
-  songNumber: number;
+export interface SongPositionPointerEvent
+  extends SystemEvent<"songPositionPointer"> {
+  value: number // 14-bit value
 }
 
-export interface TuneRequestEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "tuneRequest";
+export interface SongPositionPointerEvent
+  extends SystemEvent<"songPositionPointer"> {
+  value: number // 14-bit value
 }
 
-// Real-Time Events
-export interface TimingClockEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "timingClock";
+export interface SongSelectEvent extends SystemEvent<"songSelect"> {
+  songNumber: number
 }
 
-export interface StartEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "start";
+export interface TuneRequestEvent extends SystemEvent<"tuneRequest"> {
+  data: number[]
 }
 
-export interface ContinueEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "continue";
-}
+/* Real-Time Events */
 
-export interface StopEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "stop";
-}
+export interface TimingClockEvent extends SystemEvent<"timingClock"> {}
 
-export interface ActiveSensingEvent {
-  deltaTime: number;
-  type: "system";
-  subtype: "activeSensing";
-}
+export interface StartEvent extends SystemEvent<"start"> {}
+
+export interface ContinueEvent extends SystemEvent<"continue"> {}
+
+export interface StopEvent extends SystemEvent<"stop"> {}
+
+export interface ActiveSensingEvent extends SystemEvent<"activeSensing"> {}
 
 export type AnyMetaEvent =
   | SequenceNumberEvent
@@ -227,6 +210,17 @@ export type AnyChannelEvent =
   | UnknownChannelEvent
   | ControllerEvent
 
-export type AnySysExEvent = SysExEvent | DividedSysExEvent | TimeCodeQuarterFrameEvent | SongPositionPointerEvent | SongSelectEvent | TuneRequestEvent | TimingClockEvent | StartEvent | ContinueEvent | StopEvent | ActiveSensingEvent
+export type AnySysExEvent =
+  | SysExEvent
+  | DividedSysExEvent
+  | TimeCodeQuarterFrameEvent
+  | SongPositionPointerEvent
+  | SongSelectEvent
+  | TuneRequestEvent
+  | TimingClockEvent
+  | StartEvent
+  | ContinueEvent
+  | StopEvent
+  | ActiveSensingEvent
 
 export type AnyEvent = AnyMetaEvent | AnySysExEvent | AnyChannelEvent
