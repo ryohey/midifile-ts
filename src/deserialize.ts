@@ -1,9 +1,11 @@
-import { MIDIChannelEvents } from "."
-import { MIDIMetaEvents } from "./constants/MIDIMetaEvents"
+import { MIDIChannelEvents } from ".";
+import { MIDIMetaEvents } from "./constants/MIDIMetaEvents";
 import {
+  ActiveSensingEvent,
   AnyEvent,
   ChannelAftertouchEvent,
   ChannelPrefixEvent,
+  ContinueEvent,
   ControllerEvent,
   CopyrightNoticeEvent,
   CuePointEvent,
@@ -23,14 +25,21 @@ import {
   SequencerSpecificEvent,
   SetTempoEvent,
   SmpteOffsetEvent,
+  SongPositionPointerEvent,
+  SongSelectEvent,
+  StartEvent,
+  StopEvent,
   SysExEvent,
   TextEvent,
+  TimeCodeQuarterFrameEvent,
   TimeSignatureEvent,
+  TimingClockEvent,
   TrackNameEvent,
+  TuneRequestEvent,
   UnknownChannelEvent,
-  UnknownMetaEvent,
-} from "./event"
-import { Stream } from "./stream"
+  UnknownMetaEvent
+} from "./event";
+import { Stream } from "./stream";
 
 export function deserialize(
   stream: Stream,
@@ -247,7 +256,75 @@ export function deserializeSingleEvent(
         data: stream.read(length),
       }
     } else {
-      throw new Error("Unrecognised MIDI event type byte: " + eventTypeByte)
+      // Handle System Common and Real-Time Messages
+      switch (eventTypeByte) {
+        // --- System Common Messages ---
+        case 0xf1: // Time Code Quarter Frame
+          return <TimeCodeQuarterFrameEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "timeCodeQuarterFrame",
+            data: stream.readInt8(),
+          };
+        case 0xf2: // Song Position Pointer
+          const lsb = stream.readInt8();
+          const msb = stream.readInt8();
+          return <SongPositionPointerEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "songPositionPointer",
+            value: (msb << 7) | lsb, // 14-bit value
+          };
+        case 0xf3: // Song Select
+          return <SongSelectEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "songSelect",
+            songNumber: stream.readInt8(),
+          };
+        case 0xf6: // Tune Request
+          return <TuneRequestEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "tuneRequest",
+          };
+
+        // --- Real-Time Messages ---
+        case 0xf8: // Timing Clock
+          return <TimingClockEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "timingClock",
+          };
+        case 0xfa: // Start
+          return <StartEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "start",
+          };
+        case 0xfb: // Continue
+          return <ContinueEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "continue",
+          };
+        case 0xfc: // Stop
+          return <StopEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "stop",
+          };
+        case 0xfe: // Active Sensing
+          return <ActiveSensingEvent>{
+            deltaTime,
+            type: "system",
+            subtype: "activeSensing",
+          };
+
+        // Handle undefined/reserved messages
+        default:
+          throw new Error(`Unsupported system event: 0x${eventTypeByte.toString(16)}`);
+      }
     }
   } else {
     /* channel event */

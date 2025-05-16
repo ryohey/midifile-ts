@@ -49,7 +49,7 @@ export interface PortPrefixEvent extends MetaEvent<"portPrefix"> {
   port: number
 }
 
-export interface EndOfTrackEvent extends MetaEvent<"endOfTrack"> {}
+export interface EndOfTrackEvent extends MetaEvent<"endOfTrack"> { }
 
 export interface SetTempoEvent extends MetaEvent<"setTempo"> {
   microsecondsPerBeat: number
@@ -139,6 +139,64 @@ export interface SysExEvent extends Event<"sysEx"> {
 export interface DividedSysExEvent extends Event<"dividedSysEx"> {
   data: number[]
 }
+// System Common Events
+export interface TimeCodeQuarterFrameEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "timeCodeQuarterFrame";
+  data: number;
+}
+
+export interface SongPositionPointerEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "songPositionPointer";
+  value: number; // 14-bit value
+}
+
+export interface SongSelectEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "songSelect";
+  songNumber: number;
+}
+
+export interface TuneRequestEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "tuneRequest";
+}
+
+// Real-Time Events
+export interface TimingClockEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "timingClock";
+}
+
+export interface StartEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "start";
+}
+
+export interface ContinueEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "continue";
+}
+
+export interface StopEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "stop";
+}
+
+export interface ActiveSensingEvent {
+  deltaTime: number;
+  type: "system";
+  subtype: "activeSensing";
+}
 
 export type AnyMetaEvent =
   | SequenceNumberEvent
@@ -169,6 +227,6 @@ export type AnyChannelEvent =
   | UnknownChannelEvent
   | ControllerEvent
 
-export type AnySysExEvent = SysExEvent | DividedSysExEvent
+export type AnySysExEvent = SysExEvent | DividedSysExEvent | TimeCodeQuarterFrameEvent | SongPositionPointerEvent | SongSelectEvent | TuneRequestEvent | TimingClockEvent | StartEvent | ContinueEvent | StopEvent | ActiveSensingEvent
 
 export type AnyEvent = AnyMetaEvent | AnySysExEvent | AnyChannelEvent
